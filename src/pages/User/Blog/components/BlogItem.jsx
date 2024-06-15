@@ -68,7 +68,8 @@ function BlogItem({ blog_is_trending, blog_title, blog_thumbnail, blog_descripti
             itemRef.current.style.boxShadow = '0 4px 7px 4px #9f9d9d';
           }
         }}
-        onClick={handleClick}>
+        onClick={handleClick}
+      >
         <Item.Meta
           style={{ margin: 0 }}
           title={

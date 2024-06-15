@@ -32,7 +32,8 @@ export default function Header() {
           zIndex: 9,
           paddingBottom: '10px',
           borderBottom: '1px solid #ccc',
-        }}>
+        }}
+      >
         <Col span={4}></Col>
         <Col span={4}>
           <Image preview={false} style={{ cursor: 'pointer' }} width={90} src={Logo} onClick={() => navigate('/')} />

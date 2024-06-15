@@ -31,7 +31,8 @@ export default function Socials(props = {}) {
           key={social.link_to}
           href={social.link_to}
           target='_blank'
-          rel='noopener noreferrer'>
+          rel='noopener noreferrer'
+        >
           {social.icon}
         </a>
       ))}
