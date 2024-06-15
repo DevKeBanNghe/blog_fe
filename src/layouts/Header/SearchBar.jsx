@@ -1,7 +1,6 @@
 import { Input } from 'antd';
 const { Search } = Input;
 
-export default function SearchBar(props = {}) {
-  const onSearch = (value, _e, info) => console.log(info?.source, value);
-  return <Search placeholder='Keyword ...' allowClear size='large' onSearch={onSearch} {...props} />;
+export default function SearchBar({ onSearch, ...props } = {}) {
+  return <Search placeholder='Tìm kiếm' allowClear size='large' onSearch={onSearch} {...props} />;
 }

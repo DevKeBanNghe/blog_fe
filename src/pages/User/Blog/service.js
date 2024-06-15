@@ -1,7 +1,8 @@
-import { getApi } from 'common/utils/index';
+import { getApi, patchApi } from 'common/utils/index';
 import { ROOT_ROUTE } from './const';
 
 const getBlogListForUser = (params = {}) => getApi(`${ROOT_ROUTE}/for-user`, { params });
 const getBlogDetailForUser = (id) => getApi(`${ROOT_ROUTE}/${id}`);
+const updateBlogTrackingInfo = ({ blog_id, ...data } = {}) => patchApi(`${ROOT_ROUTE}/tracking/${blog_id}`, data);
 
-export { getBlogListForUser, getBlogDetailForUser };
+export { getBlogListForUser, getBlogDetailForUser, updateBlogTrackingInfo };

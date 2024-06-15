@@ -1,11 +1,12 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import useCurrentPage from 'hooks/useCurrentPage';
 import useQueryKeys from 'hooks/useQueryKeys';
-import { getBlogDetailForUser } from '../service';
+import { getBlogDetailForUser, updateBlogTrackingInfo } from '../service';
 import CTMarkdown from 'components/shared/CTMarkdown';
 import BlogTags from '../components/BlogTags';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Col, Row } from 'antd';
+import { toast } from 'common/utils';
 
 export default function BlogDetail() {
   const { keyDetail } = useQueryKeys();
@@ -21,6 +22,17 @@ export default function BlogDetail() {
     if (!dataGetBlogDetail) return [];
     return dataGetBlogDetail.Tag?.map((item) => item.tag_name);
   }, [dataGetBlogDetail]);
+
+  const mutationUpdateBlogTrackingInfo = useMutation({
+    mutationFn: updateBlogTrackingInfo,
+    onSuccess: ({ errors }) => {
+      if (errors) return toast.error(errors);
+    },
+  });
+
+  useEffect(() => {
+    mutationUpdateBlogTrackingInfo.mutate({ blog_id: currentBlogId });
+  }, []);
 
   return (
     <>
