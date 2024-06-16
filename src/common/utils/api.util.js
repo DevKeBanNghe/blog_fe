@@ -1,5 +1,5 @@
 import axios, { HttpStatusCode } from 'axios';
-import { getUserInfo } from 'common/reducers/user.action';
+import { getUserInfo } from 'common/reducers/user/user.action';
 import { store } from 'reduxApp/store';
 const API_URL = import.meta.env.VITE_API_URL;
 

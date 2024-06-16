@@ -1,25 +1,20 @@
 import { Col, Row } from 'antd';
 import BlogItem from '../components/BlogItem';
 import CTList from 'components/shared/CTList';
-import { toast } from 'common/utils';
 import useCurrentPage from 'hooks/useCurrentPage';
-import { useQuery } from '@tanstack/react-query';
-import useQueryKeys from 'hooks/useQueryKeys';
-import { STALE_TIME_GET_LIST } from 'common/consts/react-query.const';
-import { getBlogListForUser } from '../service';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { getBlogList } from 'common/reducers/blog/blog.action';
+import useBlogList from '../hooks/useBlogList';
 
 const Blogs = () => {
-  const { keyList } = useQueryKeys();
   const { queryParams, setQueryParams } = useCurrentPage();
+  const dispatch = useDispatch();
+  const { totalItems, itemPerPage, list = [], page: currentPage } = useBlogList();
 
-  const { data: queryGetBlogListData = {} } = useQuery({
-    queryKey: [`${keyList}-${queryParams.page}`],
-    queryFn: () => getBlogListForUser(queryParams),
-    staleTime: STALE_TIME_GET_LIST,
-  });
-  const { data, errors } = queryGetBlogListData;
-  if (errors) toast.error(errors);
-  const { totalItems, itemPerPage, list = [], page: currentPage } = data ?? {};
+  useEffect(() => {
+    dispatch(getBlogList(queryParams));
+  }, []);
 
   return (
     <Row justify={'center'}>

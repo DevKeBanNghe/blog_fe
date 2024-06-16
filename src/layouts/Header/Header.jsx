@@ -9,16 +9,19 @@ import Breadcrumb from 'layouts/Breadcrumb';
 import useCurrentPage from 'hooks/useCurrentPage';
 import { PREFIX_ADMIN_PAGE } from 'common/consts/constants.const';
 import Socials from 'layouts/Socials';
+import { getBlogList } from 'common/reducers/blog/blog.action';
+import { useDispatch } from 'react-redux';
 // import Sign from './Sign';
 // import Events from './Events';
 export default function Header() {
   const navigate = useNavigate();
   // const user = useUser();
   const headerRef = useRef();
-  const { currentRoute } = useCurrentPage({ isPaging: false });
+  const { currentRoute, queryParams } = useCurrentPage({ isPaging: false });
   const isAccessAdminPage = currentRoute.includes(PREFIX_ADMIN_PAGE);
+  const dispatch = useDispatch();
   const handleSearch = (value) => {
-    console.log('🚀 ~ handleSearch ~ value:', value);
+    dispatch(getBlogList({ ...queryParams, search: value }));
   };
 
   return (

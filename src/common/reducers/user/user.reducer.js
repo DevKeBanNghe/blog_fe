@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { getUserInfo } from './user.action';
 import { LOADING_STATUS } from 'common/consts/constants.const';
+import { mappingValueReducer } from 'common/utils/redux-reducer.util';
 
 const KEY_SYSTEM = 'SYS_ALL';
 
@@ -24,9 +25,7 @@ export const userSlice = createSlice({
       })
       .addCase(getUserInfo.fulfilled, (state, { payload }) => {
         payload.loading = LOADING_STATUS.IDLE;
-        for (const field of Object.keys(initialState)) {
-          state[field] = payload[field];
-        }
+        state = mappingValueReducer({ state, payload, initialState });
         state.isAdmin = payload.permissions.includes(KEY_SYSTEM);
       })
       .addCase(getUserInfo.rejected, (state) => {

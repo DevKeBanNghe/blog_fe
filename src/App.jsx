@@ -5,7 +5,7 @@ import { ReactToastify } from 'components/shared/ReactToastify';
 import 'configs';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { getUserInfo } from 'common/reducers/user.action';
+import { getUserInfo } from 'common/reducers/user/user.action';
 const queryClient = new QueryClient();
 store.dispatch(getUserInfo());
 const App = () => (
