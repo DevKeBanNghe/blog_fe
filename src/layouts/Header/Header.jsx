@@ -4,24 +4,35 @@ import SearchBar from './SearchBar';
 import Logo from 'images/logo.png';
 import { useNavigate } from 'react-router-dom';
 // import useUser from 'hooks/useUser';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import Breadcrumb from 'layouts/Breadcrumb';
 import useCurrentPage from 'hooks/useCurrentPage';
 import { PREFIX_ADMIN_PAGE } from 'common/consts/constants.const';
 import Socials from 'layouts/Socials';
-import { getBlogList } from 'common/reducers/blog/blog.action';
-import { useDispatch } from 'react-redux';
+import { Controller, useForm } from 'react-hook-form';
 // import Sign from './Sign';
 // import Events from './Events';
 export default function Header() {
   const navigate = useNavigate();
   // const user = useUser();
+  const { control, setValue } = useForm();
   const headerRef = useRef();
-  const { currentRoute, queryParams } = useCurrentPage({ isPaging: false });
+  const { currentRoute, queryParamsString, setQueryParams, queryParams } = useCurrentPage({ isPaging: false });
   const isAccessAdminPage = currentRoute.includes(PREFIX_ADMIN_PAGE);
-  const dispatch = useDispatch();
   const handleSearch = (value) => {
-    dispatch(getBlogList({ ...queryParams, search: value }));
+    setQueryParams((prev) => ({ ...prev, search: value }));
+  };
+
+  useEffect(() => {
+    if (queryParams.search) {
+      setValue('search', queryParams.search);
+    }
+  }, [queryParams]);
+
+  const handlePageReset = () => {
+    navigate(`/${queryParamsString}`);
+    handleSearch('');
+    setValue('search', '');
   };
 
   return (
@@ -39,14 +50,20 @@ export default function Header() {
       >
         <Col span={4}></Col>
         <Col span={4}>
-          <Image preview={false} style={{ cursor: 'pointer' }} width={90} src={Logo} onClick={() => navigate('/')} />
-          <h2 style={{ margin: '0' }}>Dev Kể Bạn Nghe</h2>
+          <Image preview={false} style={{ cursor: 'pointer' }} width={90} src={Logo} onClick={handlePageReset} />
+          <h2 onClick={handlePageReset} style={{ margin: '0', cursor: 'pointer' }}>
+            Dev Kể Bạn Nghe
+          </h2>
         </Col>
         <Col span={4}></Col>
         <Col span={8}>
           <Flex gap={'middle'} vertical style={{ position: 'absolute', bottom: '0', right: '0', width: '100%' }}>
             <Socials />
-            <SearchBar onSearch={handleSearch} />
+            <Controller
+              name='search'
+              control={control}
+              render={({ field }) => <SearchBar {...field} onSearch={handleSearch} />}
+            />
           </Flex>
         </Col>
         <Col span={4}></Col>

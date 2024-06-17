@@ -14,7 +14,7 @@ const Blogs = () => {
 
   useEffect(() => {
     dispatch(getBlogList(queryParams));
-  }, []);
+  }, [queryParams]);
 
   return (
     <Row justify={'center'}>

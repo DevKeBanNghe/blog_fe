@@ -41,6 +41,15 @@ export default function useCurrentPage({ keyIdParams = 'id', isPaging = true } =
     setSearchParams(value);
   };
 
+  const queryParamsPagingStringDefault = useMemo(
+    () =>
+      Object.entries(DEFAULT_PAGINATION).reduce(
+        (acc, [key, value], index) => `${acc}${index === 0 ? '' : '&'}${key}=${value}`,
+        '?',
+      ),
+    [],
+  );
+
   return {
     isEdit,
     isView,
@@ -52,6 +61,7 @@ export default function useCurrentPage({ keyIdParams = 'id', isPaging = true } =
     currentRoute: pathname,
     params,
     queryParamsString: `?${searchParams.toString()}`,
+    queryParamsPagingStringDefault,
     queryParams,
     setQueryParams,
   };
