@@ -1,7 +1,7 @@
 import { Flex, Col, Row, Image } from 'antd';
 import TabHeader from './TabHeader';
 import SearchBar from './SearchBar';
-import Logo from 'images/logo.png';
+import Logo from '/logo.png';
 import { useNavigate } from 'react-router-dom';
 // import useUser from 'hooks/useUser';
 import { useEffect, useRef } from 'react';

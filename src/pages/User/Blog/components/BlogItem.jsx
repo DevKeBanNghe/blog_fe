@@ -2,11 +2,24 @@ import { Badge, Image, List, Space, Typography } from 'antd';
 import Link from 'antd/es/typography/Link';
 import { useNavigate } from 'react-router-dom';
 const { Item } = List;
-import Logo from '../../../../images/logo.png';
+import Logo from '/logo.png';
 import { useRef } from 'react';
 import { ROOT_ROUTE } from '../const';
 import { LikeFilled, MessageFilled, EyeFilled } from '@ant-design/icons';
 import CTTextTruncate from 'components/shared/CTTextTruncate';
+import { styled } from 'styled-components';
+
+const StyledItem = styled(Item)`
+  background-color: #e8e8e8;
+  cursor: pointer;
+  margin-bottom: 40px;
+  border-radius: 5px;
+  box-shadow: 0 4px 7px 4px #9f9d9d;
+
+  &:hover {
+    box-shadow: 0 4px 7px 4px #858484;
+  }
+`;
 
 function BlogItem({ blog_is_trending, blog_title, blog_thumbnail, blog_description, blog_id, blog_view = 0 }) {
   const itemRef = useRef();
@@ -41,7 +54,7 @@ function BlogItem({ blog_is_trending, blog_title, blog_thumbnail, blog_descripti
   ];
   return (
     <Badge.Ribbon text='Xem nhiều' color='red' style={{ display: blog_is_trending ? '' : 'none' }}>
-      <Item
+      <StyledItem
         ref={itemRef}
         key={blog_title}
         actions={actions.map(({ icon: Icon, value, ...props }, index) => (
@@ -51,23 +64,6 @@ function BlogItem({ blog_is_trending, blog_title, blog_thumbnail, blog_descripti
           </Space>
         ))}
         extra={<Image preview={false} width={172} alt={blog_title} src={blog_thumbnail ?? Logo} />}
-        style={{
-          cursor: 'pointer',
-          backgroundColor: '#e8e8e8',
-          marginBottom: '40px',
-          borderRadius: '5px',
-          boxShadow: '0 4px 7px 4px #9f9d9d',
-        }}
-        onMouseOver={() => {
-          if (itemRef.current) {
-            itemRef.current.style.boxShadow = '0 4px 7px 4px #858484';
-          }
-        }}
-        onMouseLeave={() => {
-          if (itemRef.current) {
-            itemRef.current.style.boxShadow = '0 4px 7px 4px #9f9d9d';
-          }
-        }}
         onClick={handleClick}
       >
         <Item.Meta
@@ -79,10 +75,9 @@ function BlogItem({ blog_is_trending, blog_title, blog_thumbnail, blog_descripti
           }
         />
         <Typography style={{ minHeight: '6em' }}>
-          {' '}
-          <CTTextTruncate maxLength={255}>{blog_description}</CTTextTruncate>{' '}
+          <CTTextTruncate maxLength={255}>{blog_description}</CTTextTruncate>
         </Typography>
-      </Item>
+      </StyledItem>
     </Badge.Ribbon>
   );
 }

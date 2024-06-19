@@ -2,7 +2,6 @@ import { store } from 'reduxApp/store';
 import { Provider } from 'react-redux';
 import AppRouter from 'routers/AppRouter';
 import { ReactToastify } from 'components/shared/ReactToastify';
-import 'configs';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { getUserInfo } from 'common/reducers/user/user.action';
