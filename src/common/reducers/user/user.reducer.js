@@ -9,7 +9,7 @@ const initialState = {
   user_name: '',
   permissions: [],
   loading: '',
-  isAdmin: false,
+  isAdmin: true, // Tạm thời để true, khi đã phân quyền set thành false
 };
 
 export const userSlice = createSlice({

@@ -1,44 +1,60 @@
 import CTTable from 'components/shared/CTTable';
 import useQueryKeys from 'hooks/useQueryKeys';
-import { deleteTags, getTagList } from '../service';
+import { deleteImages, getImageList } from '../service';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'common/utils';
 import { useNavigate } from 'react-router-dom';
 import useCurrentPage from 'hooks/useCurrentPage';
 import { STALE_TIME_GET_LIST } from 'common/consts/react-query.const';
 import CTTextTruncate from 'components/shared/CTTextTruncate';
+import { Image } from 'antd';
 
-function TagTable() {
+function ImageTable() {
   const navigate = useNavigate();
   const { keyList } = useQueryKeys();
   const queryClient = useQueryClient();
-  const { id: currentTagId, queryParams, setQueryParams, queryParamsString, currentRoute } = useCurrentPage();
+  const { id: currentImageId, queryParams, setQueryParams, queryParamsString, currentRoute } = useCurrentPage();
 
   const columns = [
     {
-      title: 'Tag Name',
+      title: 'Image Name',
       width: 50,
-      dataIndex: 'tag_name',
-      key: 'tag_name',
+      dataIndex: 'image_name',
+      key: 'image_name',
       fixed: 'left',
     },
     {
-      title: 'Tag Description',
+      title: 'Image Url',
       width: 50,
-      dataIndex: 'tag_description',
-      key: 'tag_description',
+      dataIndex: 'image_url',
+      key: 'image_url',
+    },
+    {
+      title: 'Image Picture',
+      width: 50,
+      dataIndex: 'image_url',
+      key: 'image_url',
+      render: (value) => {
+        return <Image width={120} src={value} />;
+      },
+    },
+    {
+      title: 'Image Description',
+      width: 50,
+      dataIndex: 'image_description',
+      key: 'image_description',
       render: (value) => {
         return <CTTextTruncate>{value}</CTTextTruncate>;
       },
     },
   ];
 
-  const mutationDeleteTags = useMutation({
-    mutationFn: deleteTags,
+  const mutationDeleteImages = useMutation({
+    mutationFn: deleteImages,
     onSuccess: async ({ errors }, { ids }) => {
       if (errors) return toast.error(errors);
       toast.success('Delete success');
-      if (ids.includes(parseInt(currentTagId))) {
+      if (ids.includes(parseInt(currentImageId))) {
         return navigate(`${currentRoute}${queryParamsString}`);
       }
       await queryClient.fetchQuery({
@@ -48,22 +64,22 @@ function TagTable() {
   });
 
   const handleDeleteAll = async (ids = []) => {
-    mutationDeleteTags.mutate({ ids });
+    mutationDeleteImages.mutate({ ids });
   };
 
-  const { data: queryGetTagListData = {} } = useQuery({
+  const { data: queryGetImageListData = {} } = useQuery({
     queryKey: [`${keyList}-${queryParams.page}`],
-    queryFn: () => getTagList(queryParams),
+    queryFn: () => getImageList(queryParams),
     staleTime: STALE_TIME_GET_LIST,
   });
-  const { data, errors } = queryGetTagListData;
+  const { data, errors } = queryGetImageListData;
   if (errors) toast.error(errors);
   const { totalItems, itemPerPage, list, page } = data ?? {};
 
   return (
     <>
       <CTTable
-        rowKey={'tag_id'}
+        rowKey={'image_id'}
         totalItems={totalItems}
         itemPerPage={itemPerPage}
         rows={list}
@@ -73,15 +89,11 @@ function TagTable() {
         }}
         currentPage={page}
         onGlobalDelete={handleDeleteAll}
-        globalActions={[
-          {
-            content: 'Create',
-            onClick: () => navigate(`${currentRoute}/create`),
-          },
-        ]}
+        onCreateGlobal={() => navigate(`${currentRoute}/create`)}
+        actions={[{ type: 'delete' }]}
       />
     </>
   );
 }
 
-export default TagTable;
+export default ImageTable;

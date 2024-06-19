@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
-import { Button, Col, Row, Table } from 'antd';
+import { Col, Row, Table } from 'antd';
 import SearchBar from 'layouts/Header/SearchBar';
 import Actions from './Actions';
 import GlobalActions from './GlobalActions';
@@ -12,8 +12,7 @@ const CTTable = ({
   columns = [],
   rows = [],
   rowKey,
-  actions = [],
-  isShowDefaultActions = true,
+  actions = [{ type: 'delete' }, { type: 'copy' }, { type: 'edit' }, { type: 'view' }],
   handleSelected = () => {},
   onGlobalDelete = () => {},
   isSearch = true,
@@ -23,8 +22,7 @@ const CTTable = ({
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   const table_columns = useMemo(() => {
-    const isShowActions = actions.length > 0 || isShowDefaultActions;
-    if (columns.length === 0 || !isShowActions) return columns;
+    if (columns.length === 0 || actions.length === 0) return columns;
 
     const column_action = {
       title: 'Action',
@@ -35,7 +33,6 @@ const CTTable = ({
       render: (record) => {
         return (
           <Actions
-            isShowDefaultActions={isShowDefaultActions}
             actions={actions}
             dataRecord={{ ...record, row_id: record[rowKey] }}
             onGlobalDelete={onGlobalDelete}
@@ -45,7 +42,7 @@ const CTTable = ({
     };
 
     return [...columns, column_action];
-  }, [actions, columns, isShowDefaultActions]);
+  }, [actions, columns]);
 
   const selectedRowsRef = useRef(new Map());
   const handleSelectedRows = (selectedRowKeys, rowsSelected) => {
@@ -61,32 +58,30 @@ const CTTable = ({
 
   const table_rows = useMemo(() => rows.map((row) => ({ ...row, key: row[rowKey] })), [rowKey, rows]);
 
+  const checkedGlobalButton = useMemo(() => {
+    if (selectedRowKeys.length === 0) return [];
+    return [
+      {
+        style: { background: '#fbdf00' },
+        content: 'Clear all checked',
+        onClick: handleClearAllChecked,
+      },
+      {
+        danger: true,
+        content: `Delete ${selectedRowKeys.length} items`,
+        onClick: () => {
+          onGlobalDelete(selectedRowKeys);
+          handleClearAllChecked();
+        },
+      },
+    ];
+  }, [selectedRowKeys]);
+
   return (
     <>
-      {selectedRowKeys.length > 0 ? (
-        <>
-          <Button style={{ margin: '0 5px 5px 0', background: '#fbdf00' }} onClick={handleClearAllChecked}>
-            Clear all checked
-          </Button>
-          <Button
-            danger
-            style={{ marginBottom: '5px' }}
-            onClick={() => {
-              onGlobalDelete(selectedRowKeys);
-              handleClearAllChecked();
-            }}
-          >
-            Delete all
-          </Button>
-          <span style={{ marginLeft: 8 }}>Selected {selectedRowKeys.length} items</span>
-        </>
-      ) : (
-        <></>
-      )}
-
       <Row style={{ marginBottom: '10px' }}>
         <Col span={16}>
-          <GlobalActions actions={globalActions} />
+          <GlobalActions actions={[...checkedGlobalButton, ...globalActions]} />
         </Col>
         <Col span={8}>{isSearch && <SearchBar />}</Col>
       </Row>

@@ -73,7 +73,6 @@ function BlogTable() {
         }}
         currentPage={page}
         onGlobalDelete={handleDeleteAll}
-        // onCreateGlobal={() => navigate(`${currentRoute}/create`)}
         globalActions={[
           {
             content: 'Create',

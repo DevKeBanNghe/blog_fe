@@ -6,31 +6,34 @@ import { useNavigate } from 'react-router-dom';
 import { DeleteTwoTone, EyeTwoTone, EditTwoTone, CopyTwoTone } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 
-export default function Actions({ isShowDefaultActions, actions = [], onGlobalDelete, dataRecord }) {
-  const { currentRootRoute, queryParamsString } = useCurrentPage({ isPaging: false });
+export default function Actions({ actions = [], onGlobalDelete, dataRecord }) {
+  const { currentRoute, queryParamsString } = useCurrentPage({ isPaging: false });
   const navigate = useNavigate();
   const [tableActions, setTableActions] = useState(actions);
 
   useEffect(() => {
-    if (!isShowDefaultActions) return () => {};
     const actionsDefault = {
       copy: {
         icon: CopyTwoTone,
         twoToneColor: '#00a67d',
-        onClick: ({ row_id }) => navigate(`${currentRootRoute}/copy/${row_id}${queryParamsString}`),
+        disabled: true,
+        onClick: ({ row_id }) => navigate(`${currentRoute}/copy/${row_id}${queryParamsString}`),
       },
       edit: {
         icon: EditTwoTone,
         twoToneColor: '#cb8d00',
-        onClick: ({ row_id }) => navigate(`${currentRootRoute}/edit/${row_id}${queryParamsString}`),
+        disabled: true,
+        onClick: ({ row_id }) => navigate(`${currentRoute}/edit/${row_id}${queryParamsString}`),
       },
       view: {
         icon: EyeTwoTone,
-        onClick: ({ row_id }) => navigate(`${currentRootRoute}/${row_id}${queryParamsString}`),
+        disabled: true,
+        onClick: ({ row_id }) => navigate(`${currentRoute}/${row_id}${queryParamsString}`),
       },
       delete: {
         icon: DeleteTwoTone,
         twoToneColor: '#e20145',
+        disabled: true,
         onClick: ({ row_id }) => onGlobalDelete([row_id]),
       },
     };
@@ -38,6 +41,7 @@ export default function Actions({ isShowDefaultActions, actions = [], onGlobalDe
       if (!action.type) continue;
       actionsDefault[action.type] = {
         ...actionsDefault[action.type],
+        disabled: false,
         ...action,
       };
     }
@@ -46,9 +50,9 @@ export default function Actions({ isShowDefaultActions, actions = [], onGlobalDe
 
   return (
     <Flex gap='middle' justify='center' wrap='wrap'>
-      {tableActions.map(({ onClick, permission_key, ...item }, index) => (
+      {tableActions.map(({ onClick, permission_key, disabled = false, ...item }, index) => (
         <CheckPermission key={`social_icon_${index}`} permission_keys={permission_key}>
-          <CTIcon onClick={() => onClick(dataRecord)} style={{ fontSize: '22px' }} {...item} />
+          <CTIcon onClick={() => !disabled && onClick(dataRecord)} style={{ fontSize: '22px' }} {...item} />
         </CheckPermission>
       ))}
     </Flex>

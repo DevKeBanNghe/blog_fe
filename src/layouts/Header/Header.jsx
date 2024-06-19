@@ -5,7 +5,6 @@ import Logo from 'images/logo.png';
 import { useNavigate } from 'react-router-dom';
 // import useUser from 'hooks/useUser';
 import { useEffect, useRef } from 'react';
-import Breadcrumb from 'layouts/Breadcrumb';
 import useCurrentPage from 'hooks/useCurrentPage';
 import { PREFIX_ADMIN_PAGE } from 'common/consts/constants.const';
 import Socials from 'layouts/Socials';
@@ -44,7 +43,7 @@ export default function Header() {
           position: 'sticky',
           top: 0,
           zIndex: 9,
-          paddingBottom: '10px',
+          paddingBottom: '8px',
           borderBottom: '1px solid #ccc',
         }}
       >
@@ -55,21 +54,33 @@ export default function Header() {
             Dev Kể Bạn Nghe
           </h2>
         </Col>
-        <Col span={4}></Col>
-        <Col span={8}>
-          <Flex gap={'middle'} vertical style={{ position: 'absolute', bottom: '0', right: '0', width: '100%' }}>
-            <Socials />
-            <Controller
-              name='search'
-              control={control}
-              render={({ field }) => <SearchBar {...field} onSearch={handleSearch} />}
-            />
-          </Flex>
-        </Col>
-        <Col span={4}></Col>
-        <Col span={3}></Col>
-        {/* <Col span={8}>{user.user_name ? <Events /> : <Sign />}</Col> */}
-        <Col span={12}>{isAccessAdminPage ? <TabHeader /> : <Breadcrumb style={{ marginTop: '15px' }} />}</Col>
+
+        {isAccessAdminPage ? (
+          <>
+            <Col span={16}></Col>
+            <Col span={24}>
+              <Flex align='center' justify='center'>
+                <TabHeader />
+              </Flex>
+            </Col>
+          </>
+        ) : (
+          <>
+            <Col span={4}></Col>
+            <Col span={8}>
+              <Flex gap={'middle'} vertical style={{ position: 'absolute', bottom: '0', right: '0', width: '100%' }}>
+                <Socials />
+                <Controller
+                  name='search'
+                  control={control}
+                  render={({ field }) => <SearchBar {...field} onSearch={handleSearch} />}
+                />
+              </Flex>
+            </Col>
+            <Col span={4}></Col>
+            {/* <Col span={8}>{user.user_name ? <Events /> : <Sign />}</Col> */}
+          </>
+        )}
       </Row>
     </>
   );

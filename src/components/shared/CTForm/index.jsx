@@ -20,7 +20,6 @@ export default function CTForm({
   const { id, isEdit, isView } = useCurrentPage({ isPaging: false });
 
   const buttonSubmitProps = useMemo(() => {
-    if (!isShowDefaultActions) return {};
     const btnProps = {
       type: 'submit',
       content: id && isEdit ? 'Update' : 'Create',
