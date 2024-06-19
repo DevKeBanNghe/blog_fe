@@ -13,3 +13,5 @@ export const LOADING_STATUS = {
 };
 
 export const PREFIX_ADMIN_PAGE = '/admin';
+
+export const PERSONAL_BRAND = 'Dev Kể Bạn Nghe';

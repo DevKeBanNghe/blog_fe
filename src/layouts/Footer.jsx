@@ -1,6 +1,7 @@
 import { Layout } from 'antd';
 
 import Socials from './Socials';
+import { PERSONAL_BRAND } from 'common/consts/constants.const';
 const { Footer: FooterLayout } = Layout;
 
 const Footer = () => {
@@ -8,7 +9,7 @@ const Footer = () => {
     <>
       <FooterLayout style={{ textAlign: 'center', bottom: 0 }}>
         <hr />
-        <p style={{ float: 'left' }}>Dev Kể Bạn Nghe ©{new Date().getFullYear()} Created by Cù Trung</p>
+        <p style={{ float: 'left' }}>{`${PERSONAL_BRAND} ©${new Date().getFullYear()} Created by Cù Trung`}</p>
         <Socials />
       </FooterLayout>
     </>

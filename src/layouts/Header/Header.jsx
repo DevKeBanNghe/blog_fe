@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 // import useUser from 'hooks/useUser';
 import { useEffect, useRef } from 'react';
 import useCurrentPage from 'hooks/useCurrentPage';
-import { PREFIX_ADMIN_PAGE } from 'common/consts/constants.const';
+import { PERSONAL_BRAND, PREFIX_ADMIN_PAGE } from 'common/consts/constants.const';
 import Socials from 'layouts/Socials';
 import { Controller, useForm } from 'react-hook-form';
 // import Sign from './Sign';
@@ -51,7 +51,7 @@ export default function Header() {
         <Col span={4}>
           <Image preview={false} style={{ cursor: 'pointer' }} width={90} src={Logo} onClick={handlePageReset} />
           <h2 onClick={handlePageReset} style={{ margin: '0', cursor: 'pointer' }}>
-            Dev Kể Bạn Nghe
+            {PERSONAL_BRAND}
           </h2>
         </Col>
 
