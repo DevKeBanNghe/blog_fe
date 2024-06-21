@@ -36,7 +36,7 @@ const HomePage = () => {
       <FloatButton.BackTop />
       <Header collapsed={collapsed} setCollapsed={setCollapsed} />
       <Layout hasSider>
-        <Layout style={{ margin: '0' }}>
+        <Layout style={{ margin: '0', minHeight: '89vh' }}>
           <Content style={{ margin: '40px 0 0 0', overflow: 'initial' }}>
             <Row>
               <Col span={3}></Col>
