@@ -124,11 +124,18 @@ function BlogFormRef({ isShowDefaultActions = true }, ref) {
       },
     },
     {
+      field: 'blog_thumbnail',
+      render: ({ field }) => {
+        return <CTInput {...field} placeholder={'Blog Thumbnail Url'} />;
+      },
+    },
+    {
       field: 'blog_description',
       render: ({ field }) => {
         return <CTInput {...field} placeholder={'Blog description'} />;
       },
     },
+
     {
       field: 'blog_content',
       render: ({ field }) => {

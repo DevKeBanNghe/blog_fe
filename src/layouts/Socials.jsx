@@ -23,7 +23,7 @@ const socials = [
     icon: <MailFilled />,
   },
   {
-    // link_to: 'https://www.youtube.com/channel/UCSW1h6pjj4WttEI_s4esvKg',
+    link_to: 'https://www.youtube.com/channel/UCSW1h6pjj4WttEI_s4esvKg',
     icon: <YoutubeFilled />,
   },
   {

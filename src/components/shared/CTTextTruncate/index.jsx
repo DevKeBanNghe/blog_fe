@@ -1,7 +1,7 @@
 import { Typography } from 'antd';
 import { useMemo, useState } from 'react';
-const { Text, Link } = Typography;
-const CTTextTruncate = ({ children = '', maxLength = 50, ...props }) => {
+const { Link } = Typography;
+const CTTextTruncate = ({ children = '', maxLength = 50 }) => {
   const [isHide, setIsHide] = useState(true);
 
   const text = useMemo(() => {
@@ -18,13 +18,13 @@ const CTTextTruncate = ({ children = '', maxLength = 50, ...props }) => {
   }
 
   return (
-    <Text {...props}>
+    <>
       {text && (
         <>
           {text} <Link onClick={() => setIsHide(!isHide)}> {isHide ? 'more' : 'hide'}</Link>
         </>
       )}
-    </Text>
+    </>
   );
 };
 export default CTTextTruncate;

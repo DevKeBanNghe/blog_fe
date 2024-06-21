@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useOutlet } from 'react-router-dom';
 import Header from './Header/Header';
 import Footer from './Footer';
-import { Layout } from 'antd';
+import { Col, Layout, Row } from 'antd';
 const { Content } = Layout;
 import { FloatButton } from 'antd';
 // import useUser from 'hooks/useUser';
@@ -36,16 +36,20 @@ const HomePage = () => {
       <FloatButton.BackTop />
       <Header collapsed={collapsed} setCollapsed={setCollapsed} />
       <Layout hasSider>
-        <Layout style={{ margin: '0 50px' }}>
-          <Content style={{ margin: '10px 0', overflow: 'initial' }}>
-            <div
+        <Layout style={{ margin: '0' }}>
+          <Content style={{ margin: '40px 0 0 0', overflow: 'initial' }}>
+            <Row>
+              <Col span={3}></Col>
+              <Col span={18}>{outlet}</Col>
+              <Col span={3}></Col>
+            </Row>
+            {/* <div
               style={{
-                padding: 12,
+                padding: '0 120px',
                 minHeight: '100vh',
-              }}
-            >
+              }}>
               {outlet}
-            </div>
+            </div> */}
           </Content>
           <Footer />
         </Layout>

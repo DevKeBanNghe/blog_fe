@@ -1,13 +1,14 @@
-import { Badge, Image, List, Space, Typography } from 'antd';
+import { Flex, Image, List, Space, Typography } from 'antd';
 import Link from 'antd/es/typography/Link';
 import { useNavigate } from 'react-router-dom';
 const { Item } = List;
 import Logo from '/logo.png';
 import { useRef } from 'react';
 import { ROOT_ROUTE } from '../const';
-import { LikeFilled, MessageFilled, EyeFilled } from '@ant-design/icons';
+import { EyeFilled, CalendarFilled, ReadFilled } from '@ant-design/icons';
 import CTTextTruncate from 'components/shared/CTTextTruncate';
 import { styled } from 'styled-components';
+const { Title } = Typography;
 
 const StyledItem = styled(Item)`
   background-color: #e8e8e8;
@@ -21,7 +22,15 @@ const StyledItem = styled(Item)`
   }
 `;
 
-function BlogItem({ blog_is_trending, blog_title, blog_thumbnail, blog_description, blog_id, blog_view = 0 }) {
+function BlogItem({
+  blog_title,
+  blog_thumbnail,
+  blog_description,
+  blog_id,
+  blog_view = 0,
+  created_at,
+  blog_reading_time,
+}) {
   const itemRef = useRef();
   const navigate = useNavigate();
 
@@ -31,54 +40,46 @@ function BlogItem({ blog_is_trending, blog_title, blog_thumbnail, blog_descripti
 
   const actions = [
     {
+      icon: CalendarFilled,
+      value: created_at,
+    },
+    {
+      icon: ReadFilled,
+      value: blog_reading_time ?? '3 min',
+    },
+    {
       icon: EyeFilled,
       value: blog_view,
-      style: {
-        color: '#f59bac',
-      },
-    },
-    {
-      icon: LikeFilled,
-      // value: 166,
-      style: {
-        color: '#0866ff',
-      },
-    },
-    {
-      icon: MessageFilled,
-      // value: 222,
-      style: {
-        color: '#59c4a9',
-      },
     },
   ];
   return (
-    <Badge.Ribbon text='Xem nhiều' color='red' style={{ display: blog_is_trending ? '' : 'none' }}>
-      <StyledItem
-        ref={itemRef}
-        key={blog_title}
-        actions={actions.map(({ icon: Icon, value, ...props }, index) => (
-          <Space {...props} key={`action_${index}`}>
-            {<Icon />}
-            {value}
+    <StyledItem
+      ref={itemRef}
+      key={blog_title}
+      extra={<Image preview={false} width={172} alt={blog_title} src={blog_thumbnail ?? Logo} />}
+      onClick={handleClick}
+    >
+      <Item.Meta
+        style={{ margin: 0 }}
+        title={
+          <Link style={{ fontSize: '24px' }} onClick={handleClick}>
+            🤔 {blog_title}
+          </Link>
+        }
+      />
+      <Flex gap={'middle'}>
+        {actions.map(({ icon: Icon, value, ...props }, index) => (
+          <Space size={'small'} {...props} key={`action_${index}`}>
+            <Icon />
+            <span style={{ fontWeight: '500' }}>{value}</span>
           </Space>
         ))}
-        extra={<Image preview={false} width={172} alt={blog_title} src={blog_thumbnail ?? Logo} />}
-        onClick={handleClick}
-      >
-        <Item.Meta
-          style={{ margin: 0 }}
-          title={
-            <Link style={{ fontSize: '24px' }} onClick={handleClick}>
-              🤔 {blog_title}
-            </Link>
-          }
-        />
-        <Typography style={{ minHeight: '6em' }}>
-          <CTTextTruncate maxLength={255}>{blog_description}</CTTextTruncate>
-        </Typography>
-      </StyledItem>
-    </Badge.Ribbon>
+      </Flex>
+
+      <Title level={5} style={{ margin: '8px 0 0 0', minHeight: '3.5em', opacity: '0.7' }}>
+        <CTTextTruncate maxLength={180}>{blog_description}</CTTextTruncate>
+      </Title>
+    </StyledItem>
   );
 }
 

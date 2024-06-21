@@ -43,16 +43,27 @@ export default function Header() {
           position: 'sticky',
           top: 0,
           zIndex: 9,
-          paddingBottom: '8px',
           borderBottom: '1px solid #ccc',
         }}
       >
         <Col span={4}></Col>
         <Col span={4}>
-          <Image preview={false} style={{ cursor: 'pointer' }} width={90} src={Logo} onClick={handlePageReset} />
-          <h2 onClick={handlePageReset} style={{ margin: '0', cursor: 'pointer' }}>
-            {PERSONAL_BRAND}
-          </h2>
+          <Flex>
+            <Image preview={false} style={{ cursor: 'pointer' }} width={75} src={Logo} onClick={handlePageReset} />
+            <h2
+              onClick={handlePageReset}
+              style={{
+                margin: '0',
+                fontSize: '20px',
+                cursor: 'pointer',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              {PERSONAL_BRAND}
+            </h2>
+          </Flex>
         </Col>
 
         {isAccessAdminPage ? (
@@ -66,9 +77,9 @@ export default function Header() {
           </>
         ) : (
           <>
-            <Col span={4}></Col>
-            <Col span={8}>
-              <Flex gap={'middle'} vertical style={{ position: 'absolute', bottom: '0', right: '0', width: '100%' }}>
+            <Col span={2}></Col>
+            <Col span={10} style={{ display: 'flex' }}>
+              <Flex gap={'middle'} style={{ width: '100%' }} align='center' justify='space-around'>
                 <Socials />
                 <Controller
                   name='search'
