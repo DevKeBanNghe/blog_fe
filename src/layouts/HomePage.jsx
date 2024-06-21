@@ -43,13 +43,6 @@ const HomePage = () => {
               <Col span={18}>{outlet}</Col>
               <Col span={3}></Col>
             </Row>
-            {/* <div
-              style={{
-                padding: '0 120px',
-                minHeight: '100vh',
-              }}>
-              {outlet}
-            </div> */}
           </Content>
           <Footer />
         </Layout>
