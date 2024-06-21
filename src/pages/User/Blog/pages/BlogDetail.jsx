@@ -36,7 +36,7 @@ export default function BlogDetail() {
 
   return (
     <>
-      <Row justify={'center'}>
+      <Row className='blog-content' justify={'center'}>
         <Col span={20}>
           <BlogTags list={blog_tags} />
           <CTMarkdown>{dataGetBlogDetail?.blog_content}</CTMarkdown>
