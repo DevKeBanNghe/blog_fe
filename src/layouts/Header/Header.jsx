@@ -41,7 +41,8 @@ export default function Header() {
           top: 0,
           zIndex: 9,
           borderBottom: '1px solid #ccc',
-        }}>
+        }}
+      >
         <Col span={4}></Col>
         <Col span={4}>
           <Flex>
@@ -55,7 +56,8 @@ export default function Header() {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-              }}>
+              }}
+            >
               {PERSONAL_BRAND}
             </h2>
           </Flex>
