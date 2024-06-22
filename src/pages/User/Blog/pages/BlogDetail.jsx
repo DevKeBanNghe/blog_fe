@@ -8,6 +8,7 @@ import { useEffect, useMemo } from 'react';
 import { Col, Row } from 'antd';
 import { toast } from 'common/utils';
 import { styled } from 'styled-components';
+import usePageRedirect from 'hooks/usePageRedirect';
 
 const RowStyled = styled(Row)`
   * :not(h1, h2) {
@@ -19,7 +20,7 @@ export default function BlogDetail() {
   const { keyDetail } = useQueryKeys();
   const { id: currentBlogId } = useCurrentPage({ isPaging: false });
 
-  const { data: queryGetBlogDetail = {} } = useQuery({
+  const { data: queryGetBlogDetail = {}, isFetched } = useQuery({
     queryKey: [keyDetail, currentBlogId],
     queryFn: () => getBlogDetailForUser(currentBlogId),
     enabled: currentBlogId ? true : false,
@@ -37,9 +38,12 @@ export default function BlogDetail() {
     },
   });
 
+  const { goToHomePage } = usePageRedirect();
   useEffect(() => {
+    if (!isFetched) return;
+    if (!dataGetBlogDetail?.blog_is_publish) return goToHomePage();
     mutationUpdateBlogTrackingInfo.mutate({ blog_id: currentBlogId });
-  }, []);
+  }, [dataGetBlogDetail]);
 
   return (
     <>

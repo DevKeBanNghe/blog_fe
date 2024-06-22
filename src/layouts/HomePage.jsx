@@ -37,7 +37,7 @@ const HomePage = () => {
       <Header collapsed={collapsed} setCollapsed={setCollapsed} />
       <Layout hasSider>
         <Layout style={{ margin: '0', minHeight: '89vh' }}>
-          <Content style={{ margin: '0', overflow: 'initial' }}>
+          <Content style={{ margin: '10px 0 0 0', overflow: 'initial' }}>
             <Row>
               <Col span={3}></Col>
               <Col span={18}>{outlet}</Col>

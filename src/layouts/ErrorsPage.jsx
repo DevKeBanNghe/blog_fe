@@ -1,6 +1,7 @@
 import { Button, Result } from 'antd';
+import usePageRedirect from 'hooks/usePageRedirect';
 import { useRef } from 'react';
-import { useLocation, useNavigate, useRouteError } from 'react-router-dom';
+import { useLocation, useRouteError } from 'react-router-dom';
 
 const statusInstance = [
   { status: 404, title: 'Not Found' },
@@ -11,8 +12,8 @@ const statusInstance = [
 const Errors = () => {
   const error = useRouteError();
   const { state } = useLocation();
-  const navigate = useNavigate();
   const statusRef = useRef(state?.status_code ?? 404);
+  const { goToHomePage } = usePageRedirect();
 
   if (error) statusRef.current = 500;
 
@@ -23,7 +24,7 @@ const Errors = () => {
       title={status}
       subTitle={title}
       extra={
-        <Button onClick={() => navigate('/')} type='primary'>
+        <Button onClick={goToHomePage} type='primary'>
           Back Home
         </Button>
       }

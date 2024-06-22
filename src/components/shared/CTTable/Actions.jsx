@@ -5,6 +5,7 @@ import useCurrentPage from 'hooks/useCurrentPage';
 import { useNavigate } from 'react-router-dom';
 import { DeleteTwoTone, EyeTwoTone, EditTwoTone, CopyTwoTone } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
+import { showDeleteConfirm } from '../CTConfirmModal';
 
 export default function Actions({ actions = [], onGlobalDelete, dataRecord }) {
   const { currentRoute, queryParamsString } = useCurrentPage({ isPaging: false });
@@ -34,7 +35,7 @@ export default function Actions({ actions = [], onGlobalDelete, dataRecord }) {
         icon: DeleteTwoTone,
         twoToneColor: '#e20145',
         disabled: true,
-        onClick: ({ row_id }) => onGlobalDelete([row_id]),
+        onClick: ({ row_id }) => showDeleteConfirm({ onOk: () => onGlobalDelete([row_id]) }),
       },
     };
     for (const action of actions) {
@@ -49,12 +50,14 @@ export default function Actions({ actions = [], onGlobalDelete, dataRecord }) {
   }, []);
 
   return (
-    <Flex gap='middle' justify='center' wrap='wrap'>
-      {tableActions.map(({ onClick, permission_key, disabled = false, ...item }, index) => (
-        <CheckPermission key={`social_icon_${index}`} permission_keys={permission_key}>
-          <CTIcon onClick={() => !disabled && onClick(dataRecord)} style={{ fontSize: '22px' }} {...item} />
-        </CheckPermission>
-      ))}
-    </Flex>
+    <>
+      <Flex gap='middle' justify='center' wrap='wrap'>
+        {tableActions.map(({ onClick, permission_key, disabled = false, ...item }, index) => (
+          <CheckPermission key={`social_icon_${index}`} permission_keys={permission_key}>
+            <CTIcon onClick={() => !disabled && onClick(dataRecord)} style={{ fontSize: '22px' }} {...item} />
+          </CheckPermission>
+        ))}
+      </Flex>
+    </>
   );
 }

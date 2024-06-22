@@ -1,9 +1,10 @@
-import { Button, Form } from 'antd';
+import { Flex, Form } from 'antd';
 import useCurrentPage from 'hooks/useCurrentPage';
 import { useMemo } from 'react';
 import { Controller } from 'react-hook-form';
 import { useNavigate, useResolvedPath } from 'react-router-dom';
 import CheckPermission from '../CheckPermission';
+import CTButton from '../CTButton';
 
 export default function CTForm({
   name = 'form-template',
@@ -62,23 +63,27 @@ export default function CTForm({
         );
       })}
 
-      {actions.map(({ style = {}, type: htmlType, ...action }, index) => (
-        <CheckPermission key={`actions-${name}-${index}`} permission_keys={permission_keys_default_actions}>
-          <Form.Item>
-            <Button
-              disabled={action.disabled ?? isView}
-              size='large'
-              type='primary'
-              htmlType={htmlType ?? 'submit'}
-              className='login-form-button'
-              style={{ width: '100%', ...style }}
-              {...action}
-            >
-              {action.content ?? 'Submit'}
-            </Button>
-          </Form.Item>
-        </CheckPermission>
-      ))}
+      <Flex gap={'middle'} justify='center'>
+        {actions
+          .filter((action) => !action.is_hidden)
+          .map(({ style = {}, type: htmlType, ...action }, index) => (
+            <CheckPermission key={`actions-${name}-${index}`} permission_keys={permission_keys_default_actions}>
+              <Form.Item style={{ width: '100%' }}>
+                <CTButton
+                  disabled={action.disabled ?? isView}
+                  size='large'
+                  type='primary'
+                  htmlType={htmlType ?? 'submit'}
+                  className='login-form-button'
+                  style={{ width: '100%', ...style }}
+                  {...action}
+                >
+                  {action.content ?? 'Submit'}
+                </CTButton>
+              </Form.Item>
+            </CheckPermission>
+          ))}
+      </Flex>
     </Form>
   );
 }

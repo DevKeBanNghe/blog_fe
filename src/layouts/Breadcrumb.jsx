@@ -5,10 +5,12 @@ import { HomeOutlined } from '@ant-design/icons';
 import { routers } from 'routers';
 import { genRouteNameDefault } from 'common/utils/route.util';
 import useCurrentPage from 'hooks/useCurrentPage';
+import usePageRedirect from 'hooks/usePageRedirect';
 const APP_PREFIX = import.meta.env.VITE_APP_PREFIX;
 export default function Breadcrumb({ separator = '>', ...props } = {}) {
   const navigate = useNavigate();
   const { currentRouteHasParams, queryParamsString, currentRoute } = useCurrentPage({ isPaging: false });
+  const { goToHomePage } = usePageRedirect();
   const items = useMemo(() => {
     if (currentRoute === APP_PREFIX) return [];
     const breadcrumbs = [];
@@ -30,7 +32,7 @@ export default function Breadcrumb({ separator = '>', ...props } = {}) {
         href: '',
         onClick: (e) => {
           e.preventDefault();
-          navigate('/');
+          goToHomePage();
         },
       },
       ...breadcrumbs,

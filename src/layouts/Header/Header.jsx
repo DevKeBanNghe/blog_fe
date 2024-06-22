@@ -2,23 +2,23 @@ import { Flex, Col, Row, Image } from 'antd';
 import TabHeader from './TabHeader';
 import SearchBar from './SearchBar';
 import Logo from '/logo.png';
-import { useNavigate } from 'react-router-dom';
 // import useUser from 'hooks/useUser';
 import { useEffect, useRef } from 'react';
 import useCurrentPage from 'hooks/useCurrentPage';
 import { PERSONAL_BRAND, PREFIX_ADMIN_PAGE } from 'common/consts/constants.const';
 import Socials from 'layouts/Socials';
 import { Controller, useForm } from 'react-hook-form';
+import usePageRedirect from 'hooks/usePageRedirect';
 // import Sign from './Sign';
 // import Events from './Events';
 export default function Header() {
-  const navigate = useNavigate();
   // const user = useUser();
   const { control, setValue } = useForm();
   const headerRef = useRef();
-  const { currentRoute, queryParamsString, setQueryParams, queryParams } = useCurrentPage({ isPaging: false });
+  const { currentRoute, setQueryParams, queryParams } = useCurrentPage({ isPaging: false });
   const isAccessAdminPage = currentRoute.includes(PREFIX_ADMIN_PAGE);
-  const handleSearch = (value) => {
+  const { goToHomePage } = usePageRedirect();
+  const handleSearch = (value = '') => {
     setQueryParams((prev) => ({ ...prev, search: value }));
   };
 
@@ -29,9 +29,8 @@ export default function Header() {
   }, [queryParams]);
 
   const handlePageReset = () => {
-    navigate(`/${queryParamsString}`);
-    handleSearch('');
-    setValue('search', '');
+    goToHomePage();
+    handleSearch();
   };
 
   return (

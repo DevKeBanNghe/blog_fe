@@ -7,7 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import useCurrentPage from 'hooks/useCurrentPage';
 import { STALE_TIME_GET_LIST } from 'common/consts/react-query.const';
 import CTTextTruncate from 'components/shared/CTTextTruncate';
-
+import { Typography } from 'antd';
+const { Text } = Typography;
 function BlogTable() {
   const navigate = useNavigate();
   const { keyList } = useQueryKeys();
@@ -21,6 +22,27 @@ function BlogTable() {
       dataIndex: 'blog_title',
       key: 'blog_title',
       fixed: 'left',
+    },
+    {
+      title: 'Blog Publish Status',
+      width: 50,
+      dataIndex: 'blog_is_publish',
+      key: 'blog_is_publish',
+      render: (is_publish) => {
+        const textProps = {
+          type: 'success',
+          content: 'Publish',
+        };
+        if (!is_publish) {
+          textProps.type = 'danger';
+          textProps.content = 'Unpublish';
+        }
+        return (
+          <Text strong type={textProps.type}>
+            {textProps.content}
+          </Text>
+        );
+      },
     },
     {
       title: 'Blog Description',

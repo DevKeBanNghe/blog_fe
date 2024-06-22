@@ -1,12 +1,12 @@
 import { Card, Col, Collapse, Row, Switch } from 'antd';
 import CTForm from 'components/shared/CTForm';
-import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import CTModal from 'components/shared/CTModal';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'common/utils';
 import { transferToOptionSelect } from 'common/utils/select.util';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createBlog, getBlogDetail, updateBlog } from '../service';
+import { createBlog, getBlogDetail, updatePublishBlogStatus, updateBlog } from '../service';
 import { DEFAULT_PAGINATION, SELECT_LIMIT_OPTIONS } from 'common/consts/constants.const';
 import { PlusCircleFilled } from '@ant-design/icons';
 import CTIcon from 'components/shared/CTIcon';
@@ -150,6 +150,7 @@ function BlogFormRef({ isShowDefaultActions = true }, ref) {
         return (
           <>
             <Collapse
+              defaultActiveKey={1}
               items={[
                 {
                   key: '1',
@@ -196,6 +197,42 @@ function BlogFormRef({ isShowDefaultActions = true }, ref) {
     reset({ ...blogDetail, tag_ids: Tag?.map((item) => item.tag_id) });
   }, [dataGetBlogDetail]);
 
+  const isPublish = watch('blog_is_publish');
+  const { buttonColor, buttonContent, messageContent } = useMemo(() => {
+    const publishProps = {
+      buttonContent: 'Publish',
+      buttonColor: 'green',
+    };
+    if (isPublish) {
+      publishProps.buttonContent = 'Unpublish';
+      publishProps.buttonColor = 'red';
+    }
+    return { ...publishProps, messageContent: publishProps.buttonContent };
+  }, [isPublish]);
+
+  const mutationPublishBlogs = useMutation({
+    mutationFn: updatePublishBlogStatus,
+    onSuccess: ({ errors }) => {
+      if (errors) return toast.error(errors);
+      queryClient.invalidateQueries([keyDetail, currentBlogId]);
+      toast.success(`${messageContent} blog successful`);
+    },
+  });
+
+  const blogActions = [
+    {
+      content: buttonContent,
+      is_hidden: currentBlogId ? 0 : 1,
+      type: 'button',
+      style: {
+        backgroundColor: buttonColor,
+      },
+      onClick: async () => {
+        mutationPublishBlogs.mutate({ blog_id: parseInt(currentBlogId), blog_is_publish: !isPublish });
+      },
+    },
+  ];
+
   return (
     <>
       <Row justify={'center'}>
@@ -207,6 +244,7 @@ function BlogFormRef({ isShowDefaultActions = true }, ref) {
               global_control={control}
               onSubmit={handleSubmit(onSubmit)}
               isShowDefaultActions={isShowDefaultActions}
+              actions={blogActions}
             />
           </Card>
           <CTModal

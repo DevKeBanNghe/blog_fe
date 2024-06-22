@@ -1,4 +1,4 @@
-import { deleteApi, getApi, postApi, putApi } from 'common/utils/index';
+import { deleteApi, getApi, patchApi, postApi, putApi } from 'common/utils/index';
 import { ROOT_ROUTE } from './const';
 import { PREFIX_ADMIN_PAGE } from 'common/consts/constants.const';
 
@@ -8,5 +8,6 @@ const updateBlog = (data = {}) => putApi(`${prefix}`, data);
 const getBlogList = (params = {}) => getApi(`${prefix}`, { params });
 const getBlogDetail = (id) => getApi(`${prefix}/${id}`);
 const deleteBlogs = (params) => deleteApi(`${prefix}`, { params });
+const updatePublishBlogStatus = (data = {}) => patchApi(`${prefix}/publish`, data);
 
-export { createBlog, updateBlog, getBlogList, getBlogDetail, deleteBlogs };
+export { createBlog, updateBlog, getBlogList, getBlogDetail, deleteBlogs, updatePublishBlogStatus };
