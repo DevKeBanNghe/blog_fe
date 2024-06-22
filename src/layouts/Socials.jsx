@@ -41,7 +41,7 @@ const socials = [
 ];
 export default function Socials(props = {}) {
   return (
-    <Flex gap={'small'} align='center' justify='flex-end' {...props}>
+    <Flex gap={'small'} align='center' justify='center' {...props}>
       {socials.map((social) => (
         <Link
           key={social.link_to}
