@@ -7,6 +7,13 @@ import BlogTags from '../components/BlogTags';
 import { useEffect, useMemo } from 'react';
 import { Col, Row } from 'antd';
 import { toast } from 'common/utils';
+import { styled } from 'styled-components';
+
+const RowStyled = styled(Row)`
+  * :not(h1, h2) {
+    font-size: large;
+  }
+`;
 
 export default function BlogDetail() {
   const { keyDetail } = useQueryKeys();
@@ -36,12 +43,12 @@ export default function BlogDetail() {
 
   return (
     <>
-      <Row className='blog-content' justify={'center'}>
+      <RowStyled justify={'center'}>
         <Col span={20}>
           <BlogTags list={blog_tags} />
           <CTMarkdown>{dataGetBlogDetail?.blog_content}</CTMarkdown>
         </Col>
-      </Row>
+      </RowStyled>
     </>
   );
 }

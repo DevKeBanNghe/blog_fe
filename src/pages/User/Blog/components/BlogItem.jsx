@@ -13,7 +13,7 @@ const { Title } = Typography;
 const StyledItem = styled(Item)`
   background-color: #e8e8e8;
   cursor: pointer;
-  margin-bottom: 40px;
+  margin-top: 40px;
   border-radius: 5px;
   box-shadow: 0 4px 7px 4px #9f9d9d;
 
@@ -45,7 +45,7 @@ function BlogItem({
     },
     {
       icon: ReadFilled,
-      value: blog_reading_time ?? '3 min',
+      value: `${blog_reading_time} min`,
     },
     {
       icon: EyeFilled,

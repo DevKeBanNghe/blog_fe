@@ -18,6 +18,7 @@ import FormItem from 'antd/es/form/FormItem';
 import CTMarkdown from 'components/shared/CTMarkdown';
 import TagForm from 'pages/Admin/Tag/components/TagForm';
 import { getTagOptions } from 'pages/Admin/Tag/service';
+import markdownToTxt from 'markdown-to-txt';
 
 function BlogFormRef({ isShowDefaultActions = true }, ref) {
   const [isOpenTagModal, setIsOpenTagModal] = useState(false);
@@ -38,12 +39,19 @@ function BlogFormRef({ isShowDefaultActions = true }, ref) {
     setFocus,
     watch,
   } = useForm();
+
+  const calBlogTimeReadingTime = () => {
+    const wordsPerMinute = 250;
+    const blogContent = markdownToTxt(watch('blog_content'))?.replaceAll(/\s/g, '');
+    return Math.ceil(blogContent.length / wordsPerMinute);
+  };
+
   const onSubmit = async (values) => {
     if (isCopy) delete values.blog_id;
     const payload = { ...values };
     currentBlogId && isEdit
       ? mutationUpdateBlogs.mutate({ ...payload, blog_id: parseInt(currentBlogId) })
-      : mutationCreateBlogs.mutate(payload);
+      : mutationCreateBlogs.mutate({ ...payload, blog_reading_time: calBlogTimeReadingTime() });
   };
 
   const handleFetchTagOptions = async (value) => {
