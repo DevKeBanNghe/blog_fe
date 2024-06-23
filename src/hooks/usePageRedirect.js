@@ -7,5 +7,6 @@ export default function usePageRedirect() {
 
   return {
     goToHomePage: () => navigate(`${APP_PREFIX}${queryParamsString}`),
+    navigate: (link = '', options) => navigate(`${link}${queryParamsString}`, options),
   };
 }

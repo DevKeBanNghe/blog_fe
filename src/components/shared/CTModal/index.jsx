@@ -3,7 +3,6 @@ const CTModal = ({ children, title = 'CTModal', open = false, footer, onCancel, 
   return (
     <>
       <Modal
-        {...props}
         maskClosable={false}
         open={open}
         title={title}
@@ -11,6 +10,7 @@ const CTModal = ({ children, title = 'CTModal', open = false, footer, onCancel, 
         onCancel={onCancel}
         footer={footer}
         okText={'Submit'}
+        {...props}
       >
         {children}
       </Modal>
