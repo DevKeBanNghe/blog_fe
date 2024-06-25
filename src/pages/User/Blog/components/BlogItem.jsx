@@ -56,9 +56,8 @@ function BlogItem({
     <StyledItem
       ref={itemRef}
       key={blog_title}
-      extra={<Image preview={false} width={172} alt={blog_title} src={blog_thumbnail ?? Logo} />}
-      onClick={handleClick}
-    >
+      extra={<Image preview={false} width={172} alt={blog_title} src={blog_thumbnail ? blog_thumbnail : Logo} />}
+      onClick={handleClick}>
       <Item.Meta
         style={{ margin: 0 }}
         title={
