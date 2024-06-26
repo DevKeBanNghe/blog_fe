@@ -6,11 +6,13 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { getBlogList } from 'common/reducers/blog/blog.action';
 import useBlogList from '../hooks/useBlogList';
+import { LOADING_STATUS } from 'common/consts/constants.const';
 
 const Blogs = () => {
   const { queryParams, setQueryParams } = useCurrentPage();
   const dispatch = useDispatch();
-  const { totalItems, itemPerPage, list = [], page: currentPage } = useBlogList();
+  const { totalItems, itemPerPage, list = [], page: currentPage, loading } = useBlogList();
+  const isLoading = loading === LOADING_STATUS.PENDING;
 
   useEffect(() => {
     dispatch(getBlogList(queryParams));
@@ -20,6 +22,7 @@ const Blogs = () => {
     <Row justify={'center'}>
       <Col span={16}>
         <CTList
+          loading={isLoading}
           itemLayout='vertical'
           size='large'
           pagination={{
