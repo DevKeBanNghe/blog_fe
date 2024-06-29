@@ -50,7 +50,7 @@ function BlogFormRef({ isShowDefaultActions = true }, ref) {
     if (isCopy) delete values.blog_id;
     const payload = { ...values };
     currentBlogId && isEdit
-      ? mutationUpdateBlogs.mutate({ ...payload, blog_id: parseInt(currentBlogId) })
+      ? mutationUpdateBlogs.mutate({ ...payload, blog_id: currentBlogId })
       : mutationCreateBlogs.mutate({ ...payload, blog_reading_time: calBlogTimeReadingTime() });
   };
 
@@ -222,13 +222,13 @@ function BlogFormRef({ isShowDefaultActions = true }, ref) {
   const blogActions = [
     {
       content: buttonContent,
-      is_hidden: currentBlogId ? 0 : 1,
+      is_hidden: isEdit ? 0 : 1,
       type: 'button',
       style: {
         backgroundColor: buttonColor,
       },
       onClick: async () => {
-        mutationPublishBlogs.mutate({ blog_id: parseInt(currentBlogId), blog_is_publish: !isPublish });
+        mutationPublishBlogs.mutate({ blog_id: currentBlogId, blog_is_publish: !isPublish });
       },
     },
   ];

@@ -60,7 +60,7 @@ function BlogTable() {
     onSuccess: async ({ errors }, { ids }) => {
       if (errors) return toast.error(errors);
       toast.success('Delete success');
-      if (ids.includes(parseInt(currentBlogId))) {
+      if (ids.includes(currentBlogId)) {
         return navigate(`${currentRoute}${queryParamsString}`);
       }
       await queryClient.fetchQuery({

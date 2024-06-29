@@ -1,8 +1,9 @@
 import { DEFAULT_PAGINATION } from 'common/consts/constants.const';
+import { isFunction } from 'lodash';
 import { useEffect, useMemo } from 'react';
 import { useParams, useResolvedPath, useSearchParams } from 'react-router-dom';
 
-export default function useCurrentPage({ keyIdParams = 'id', isPaging = true } = {}) {
+export default function useCurrentPage({ keyIdParams = 'id', isPaging = true, customIdParams } = {}) {
   const [searchParams, setSearchParams] = useSearchParams();
   const { pathname } = useResolvedPath();
   const currentRootRouteIndex = pathname.indexOf(import.meta.env.VITE_APP_PREFIX, 1);
@@ -11,7 +12,10 @@ export default function useCurrentPage({ keyIdParams = 'id', isPaging = true } =
 
   const isEdit = pathname.includes('edit');
   const isCopy = pathname.includes('copy');
-  const id = params[keyIdParams];
+  const id =
+    customIdParams && isFunction(customIdParams) && params[keyIdParams]
+      ? customIdParams(params[keyIdParams])
+      : params[keyIdParams];
   const isView = !isEdit && !isCopy && id ? true : false;
   const queryParams = useMemo(() => {
     return searchParams.entries().reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});

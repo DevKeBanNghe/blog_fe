@@ -54,7 +54,7 @@ function ImageTable() {
     onSuccess: async ({ errors }, { ids }) => {
       if (errors) return toast.error(errors);
       toast.success('Delete success');
-      if (ids.includes(parseInt(currentImageId))) {
+      if (ids.includes(currentImageId)) {
         return navigate(`${currentRoute}${queryParamsString}`);
       }
       await queryClient.fetchQuery({

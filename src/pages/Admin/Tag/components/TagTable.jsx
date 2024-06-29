@@ -38,7 +38,7 @@ function TagTable() {
     onSuccess: async ({ errors }, { ids }) => {
       if (errors) return toast.error(errors);
       toast.success('Delete success');
-      if (ids.includes(parseInt(currentTagId))) {
+      if (ids.includes(currentTagId)) {
         return navigate(`${currentRoute}${queryParamsString}`);
       }
       await queryClient.fetchQuery({

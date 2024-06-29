@@ -18,8 +18,16 @@ const RowStyled = styled(Row)`
 
 export default function BlogDetail() {
   const { keyDetail } = useQueryKeys();
-  const { id: currentBlogId } = useCurrentPage({ isPaging: false });
+  const { id: currentBlogId } = useCurrentPage({
+    isPaging: false,
+    customIdParams: (id) => {
+      const indexLastDash = id.lastIndexOf('-');
+      if (indexLastDash < 0) return id;
+      return id.slice(indexLastDash + 1);
+    },
+  });
 
+  console.log('🚀 ~ BlogDetail ~ currentBlogId:', currentBlogId);
   const { data: queryGetBlogDetail = {}, isFetched } = useQuery({
     queryKey: [keyDetail, currentBlogId],
     queryFn: () => getBlogDetailForUser(currentBlogId),

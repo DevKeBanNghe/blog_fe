@@ -51,9 +51,9 @@ export default function Socials(props = {}) {
   return (
     <>
       <Flex gap={'small'} align='center' justify='center' {...props}>
-        {socials.map((social) => (
+        {socials.map((social, index) => (
           <Link
-            key={social.link_to}
+            key={`social-${index}`}
             style={{
               fontSize: '24px',
               color: '#727272',

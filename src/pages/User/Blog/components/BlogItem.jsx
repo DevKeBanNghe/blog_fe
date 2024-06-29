@@ -3,11 +3,13 @@ import Link from 'antd/es/typography/Link';
 import { useNavigate } from 'react-router-dom';
 const { Item } = List;
 import Logo from '/logo.png';
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { ROOT_ROUTE } from '../const';
 import { EyeFilled, CalendarFilled, ReadFilled } from '@ant-design/icons';
 import CTTextTruncate from 'components/shared/CTTextTruncate';
 import { styled } from 'styled-components';
+import { removeDiacritics } from 'common/utils';
+import { lowerCase } from 'lodash';
 const { Title } = Typography;
 
 const StyledItem = styled(Item)`
@@ -34,8 +36,12 @@ function BlogItem({
   const itemRef = useRef();
   const navigate = useNavigate();
 
+  const titleParam = useMemo(() => {
+    return removeDiacritics(lowerCase(blog_title)).replaceAll(' ', '-');
+  }, [blog_title]);
+
   const handleClick = () => {
-    navigate(`${ROOT_ROUTE}/${blog_id}`);
+    navigate(`${ROOT_ROUTE}/${titleParam}-${blog_id}`);
   };
 
   const actions = [

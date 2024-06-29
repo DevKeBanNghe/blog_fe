@@ -23,7 +23,7 @@ function TagFormRef({ isShowDefaultActions = true, isFormModal = !isShowDefaultA
     if (isCopy) delete values.tag_id;
     const payload = { ...values };
     currentTagId && isEdit && !isFormModal
-      ? mutationUpdateTags.mutate({ ...payload, tag_id: parseInt(currentTagId) })
+      ? mutationUpdateTags.mutate({ ...payload, tag_id: currentTagId })
       : mutationCreateTags.mutate(payload);
   };
 
