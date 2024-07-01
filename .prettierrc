@@ -8,6 +8,5 @@
   "useTabs": false,
   "bracketSpacing": true,
   "tabWidth": 2,
-  "jsxSingleQuote": true,
-  "jsxBracketSameLine": true
+  "jsxSingleQuote": true
 }

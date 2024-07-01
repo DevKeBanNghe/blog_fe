@@ -77,21 +77,6 @@ function BlogItem({
           </Link>
         }
       />
-
-      {/* <Flex gap={'middle'} style={{ maxWidth: '100%' }}>
-        {actions.map(({ icon: Icon, value, ...props }, index) => (
-          <Space size={'small'} {...props} key={`action_${index}`}>
-            <Icon />
-            <span style={{ fontWeight: '500' }}>{value}</span>
-          </Space>
-        ))}
-      </Flex>
-
-      
-      <Title level={5} style={{ margin: '8px 0 0 0', minHeight: '3.5em', opacity: '0.7' }}>
-        <CTTextTruncate maxLength={180}>{blog_description}</CTTextTruncate>
-      </Title> */}
-
       <Row>
         <Col span={24}>
           <Flex wrap='wrap' gap={'middle'}>
