@@ -1,4 +1,4 @@
-import { Flex, Image, List, Space, Typography } from 'antd';
+import { Col, Flex, Image, List, Row, Space, Typography } from 'antd';
 import Link from 'antd/es/typography/Link';
 import { useNavigate } from 'react-router-dom';
 const { Item } = List;
@@ -62,9 +62,12 @@ function BlogItem({
     <StyledItem
       ref={itemRef}
       key={blog_title}
-      extra={<Image preview={false} width={172} alt={blog_title} src={blog_thumbnail ? blog_thumbnail : Logo} />}
-      onClick={handleClick}
-    >
+      extra={
+        <Col xs={0} md={24}>
+          <Image preview={false} width={172} alt={blog_title} src={blog_thumbnail ? blog_thumbnail : Logo} />
+        </Col>
+      }
+      onClick={handleClick}>
       <Item.Meta
         style={{ margin: 0 }}
         title={
@@ -73,7 +76,8 @@ function BlogItem({
           </Link>
         }
       />
-      <Flex gap={'middle'}>
+
+      {/* <Flex gap={'middle'} style={{ maxWidth: '100%' }}>
         {actions.map(({ icon: Icon, value, ...props }, index) => (
           <Space size={'small'} {...props} key={`action_${index}`}>
             <Icon />
@@ -82,9 +86,28 @@ function BlogItem({
         ))}
       </Flex>
 
+      
       <Title level={5} style={{ margin: '8px 0 0 0', minHeight: '3.5em', opacity: '0.7' }}>
         <CTTextTruncate maxLength={180}>{blog_description}</CTTextTruncate>
-      </Title>
+      </Title> */}
+
+      <Row>
+        <Col span={24}>
+          <Flex wrap='wrap' gap={'middle'}>
+            {actions.map(({ icon: Icon, value, ...props }, index) => (
+              <Space size={'small'} {...props} key={`action_${index}`}>
+                <Icon />
+                <span style={{ fontWeight: '500' }}>{value}</span>
+              </Space>
+            ))}
+          </Flex>
+        </Col>
+        <Col span={24}>
+          <Title level={5} style={{ margin: '8px 0 0 0', minHeight: '3.5em', opacity: '0.7' }}>
+            <CTTextTruncate maxLength={180}>{blog_description}</CTTextTruncate>
+          </Title>
+        </Col>
+      </Row>
     </StyledItem>
   );
 }

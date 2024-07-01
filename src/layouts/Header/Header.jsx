@@ -42,25 +42,25 @@ export default function Header() {
           zIndex: 9,
           borderBottom: '1px solid #ccc',
         }}
-      >
-        <Col span={4}></Col>
-        <Col span={4}>
-          <Flex>
-            <Image preview={false} style={{ cursor: 'pointer' }} width={75} src={Logo} onClick={handlePageReset} />
-            <h2
-              onClick={handlePageReset}
-              style={{
-                margin: '0',
-                fontSize: '20px',
-                cursor: 'pointer',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              {PERSONAL_BRAND}
-            </h2>
-          </Flex>
+        justify={'center'}
+        align='middle'>
+        <Col xs={0} span={4}></Col>
+        <Col xs={3} md={1}>
+          <Image preview={false} style={{ cursor: 'pointer' }} width={75} src={Logo} onClick={handlePageReset} />
+        </Col>
+        <Col xs={10} md={3}>
+          <h2
+            onClick={handlePageReset}
+            style={{
+              margin: '0',
+              fontSize: '20px',
+              cursor: 'pointer',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            {PERSONAL_BRAND}
+          </h2>
         </Col>
 
         {isAccessAdminPage ? (
@@ -74,18 +74,19 @@ export default function Header() {
           </>
         ) : (
           <>
-            <Col span={2}></Col>
-            <Col span={10} style={{ display: 'flex' }}>
-              <Flex gap={'middle'} style={{ width: '100%' }} align='center' justify='space-around'>
-                <Socials />
-                <Controller
-                  name='search'
-                  control={control}
-                  render={({ field }) => <SearchBar {...field} onSearch={handleSearch} />}
-                />
-              </Flex>
+            <Col span={1}></Col>
+            <Col xs={0} md={4}>
+              <Socials />
             </Col>
-            <Col span={4}></Col>
+            <Col xs={16} md={5}>
+              <Controller
+                name='search'
+                control={control}
+                render={({ field }) => <SearchBar {...field} onSearch={handleSearch} />}
+              />
+            </Col>
+
+            <Col xs={0} span={4}></Col>
             {/* <Col span={8}>{user.user_name ? <Events /> : <Sign />}</Col> */}
           </>
         )}

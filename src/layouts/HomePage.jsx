@@ -35,17 +35,17 @@ const HomePage = () => {
     <>
       <FloatButton.BackTop />
       <Header collapsed={collapsed} setCollapsed={setCollapsed} />
-      <Layout hasSider>
-        <Layout style={{ margin: '0', minHeight: '89vh' }}>
-          <Content style={{ margin: '10px 0 0 0', overflow: 'initial' }}>
-            <Row>
-              <Col span={3}></Col>
-              <Col span={18}>{outlet}</Col>
-              <Col span={3}></Col>
-            </Row>
-          </Content>
-          <Footer />
-        </Layout>
+      <Layout style={{ margin: '0', minHeight: '89.35vh' }}>
+        <Content style={{ margin: '10px 0 0 0', overflow: 'initial' }}>
+          <Row justify={'center'}>
+            <Col xs={0} md={3}></Col>
+            <Col xs={24} md={18}>
+              {outlet}
+            </Col>
+            <Col xs={0} md={3}></Col>
+          </Row>
+        </Content>
+        <Footer />
       </Layout>
     </>
   );
