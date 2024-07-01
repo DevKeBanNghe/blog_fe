@@ -14,10 +14,6 @@ const RowStyled = styled(Row)`
   * :not(h1, h2) {
     font-size: large;
   }
-
-  img {
-    width: 100%;
-  }
 `;
 
 export default function BlogDetail() {
