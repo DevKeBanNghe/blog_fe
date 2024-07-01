@@ -67,7 +67,8 @@ function BlogItem({
           <Image preview={false} width={172} alt={blog_title} src={blog_thumbnail ? blog_thumbnail : Logo} />
         </Col>
       }
-      onClick={handleClick}>
+      onClick={handleClick}
+    >
       <Item.Meta
         style={{ margin: 0 }}
         title={

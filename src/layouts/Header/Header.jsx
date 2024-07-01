@@ -43,7 +43,8 @@ export default function Header() {
           borderBottom: '1px solid #ccc',
         }}
         justify={'center'}
-        align='middle'>
+        align='middle'
+      >
         <Col xs={0} span={4}></Col>
         <Col xs={3} md={1}>
           <Image preview={false} style={{ cursor: 'pointer' }} width={75} src={Logo} onClick={handlePageReset} />
@@ -58,7 +59,8 @@ export default function Header() {
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-            }}>
+            }}
+          >
             {PERSONAL_BRAND}
           </h2>
         </Col>
