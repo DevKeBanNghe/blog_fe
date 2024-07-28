@@ -20,7 +20,7 @@ export default function Socials(props = {}) {
   const { navigate } = usePageRedirect();
   const socials = [
     {
-      link_to: `https://www.youtube.com/@${personalBrandCustom}-CT`,
+      link_to: `https://www.youtube.com/@${personalBrandCustom}`,
       icon: <YoutubeFilled />,
     },
     {
