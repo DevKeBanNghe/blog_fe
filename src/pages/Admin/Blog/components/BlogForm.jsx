@@ -41,7 +41,7 @@ function BlogFormRef({ isShowDefaultActions = true }, ref) {
   } = useForm();
 
   const calBlogTimeReadingTime = () => {
-    const wordsPerMinute = 250;
+    const wordsPerMinute = 200;
     const blogContent = markdownToTxt(watch('blog_content'))?.replaceAll(/\s/g, '');
     return Math.ceil(blogContent.length / wordsPerMinute);
   };
