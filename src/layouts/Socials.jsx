@@ -11,21 +11,19 @@ import { Flex } from 'antd';
 import Link from 'antd/es/typography/Link';
 import { PERSONAL_BRAND } from 'common/consts/constants.const';
 import { removeDiacritics, toLowerCase } from 'common/utils';
-import usePageRedirect from 'hooks/usePageRedirect';
 import { ROOT_ROUTE as donateRoute } from 'pages/User/Donate/const';
 const personalBrandCustom = removeDiacritics(PERSONAL_BRAND).replaceAll(' ', '');
 const personalBrandCustomLowerCase = toLowerCase(personalBrandCustom);
 
 export default function Socials(props = {}) {
-  const { navigate } = usePageRedirect();
   const socials = [
     {
       link_to: `https://www.youtube.com/@${personalBrandCustom}`,
       icon: <YoutubeFilled />,
     },
     {
+      link_to: donateRoute,
       icon: <CoffeeOutlined />,
-      onClick: () => navigate(donateRoute),
     },
     {
       link_to: `https://github.com/${personalBrandCustom}`,
