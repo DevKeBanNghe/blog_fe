@@ -19,7 +19,7 @@ export default function Header() {
   const isAccessAdminPage = currentRoute.includes(PREFIX_ADMIN_PAGE);
   const { goToHomePage } = usePageRedirect();
   const handleSearch = (value = '') => {
-    setQueryParams((prev) => ({ ...prev, search: value }));
+    setQueryParams((prev) => ({ ...prev, page: 1, search: value }));
   };
 
   useEffect(() => {
