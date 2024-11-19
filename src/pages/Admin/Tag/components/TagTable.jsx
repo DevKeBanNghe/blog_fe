@@ -79,7 +79,7 @@ function TagTable() {
             onClick: () => navigate(`${currentRoute}/create`),
           },
         ]}
-        onSearch={(value) => setTagListParams((prev) => ({ ...prev, search: value }))}
+        onSearch={(value) => setTagListParams((prev) => ({ ...prev, page: 1, search: value }))}
         onRefresh={() => queryClient.invalidateQueries({ queryKey: [`${keyTagList}`] })}
       />
     </>

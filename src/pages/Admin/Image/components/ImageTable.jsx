@@ -95,7 +95,7 @@ function ImageTable() {
             onClick: () => navigate(`${currentRoute}/create`),
           },
         ]}
-        onSearch={(value) => setImageListParams((prev) => ({ ...prev, search: value }))}
+        onSearch={(value) => setImageListParams((prev) => ({ ...prev, page: 1, search: value }))}
         onRefresh={() => queryClient.invalidateQueries({ queryKey: [`${keyImageList}`] })}
       />
     </>

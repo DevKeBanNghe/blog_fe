@@ -99,7 +99,7 @@ function BlogTable() {
             onClick: () => navigate(`${currentRoute}/create`),
           },
         ]}
-        onSearch={(value) => setBlogListParams((prev) => ({ ...prev, search: value }))}
+        onSearch={(value) => setBlogListParams((prev) => ({ ...prev, page: 1, search: value }))}
         onRefresh={() => queryClient.invalidateQueries({ queryKey: [`${keyBlogList}`] })}
       />
     </>
