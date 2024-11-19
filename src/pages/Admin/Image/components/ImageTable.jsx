@@ -8,12 +8,15 @@ import useCurrentPage from 'hooks/useCurrentPage';
 import { STALE_TIME_GET_LIST } from 'common/consts/react-query.const';
 import CTTextTruncate from 'components/shared/CTTextTruncate';
 import { Image } from 'antd';
+import { DEFAULT_PAGINATION } from 'common/consts/constants.const';
+import { useState } from 'react';
 
 function ImageTable() {
   const navigate = useNavigate();
-  const { keyList } = useQueryKeys();
+  const { keyImageList: keyImageList } = useQueryKeys({ prefix: 'imageList' });
   const queryClient = useQueryClient();
-  const { id: currentImageId, queryParams, setQueryParams, queryParamsString, currentRoute } = useCurrentPage();
+  const { currentRoute } = useCurrentPage({ isPaging: false });
+  const [imageListParams, setImageListParams] = useState(DEFAULT_PAGINATION);
 
   const columns = [
     {
@@ -51,15 +54,12 @@ function ImageTable() {
 
   const mutationDeleteImages = useMutation({
     mutationFn: deleteImages,
-    onSuccess: async ({ errors }, { ids }) => {
+    onSuccess: async ({ errors }) => {
       if (errors) return toast.error(errors);
-      toast.success('Delete success');
-      if (ids.includes(currentImageId)) {
-        return navigate(`${currentRoute}${queryParamsString}`);
-      }
       await queryClient.fetchQuery({
-        queryKey: [`${keyList}-${queryParams.page}`],
+        queryKey: [`${keyImageList}`, imageListParams],
       });
+      toast.success('Delete success');
     },
   });
 
@@ -68,8 +68,8 @@ function ImageTable() {
   };
 
   const { data: queryGetImageListData = {} } = useQuery({
-    queryKey: [`${keyList}-${queryParams.page}`],
-    queryFn: () => getImageList(queryParams),
+    queryKey: [`${keyImageList}`, imageListParams],
+    queryFn: () => getImageList(imageListParams),
     staleTime: STALE_TIME_GET_LIST,
   });
   const { data, errors } = queryGetImageListData;
@@ -85,12 +85,18 @@ function ImageTable() {
         rows={list}
         columns={columns}
         onChange={({ current: page }) => {
-          setQueryParams((prev) => ({ ...prev, page }));
+          setImageListParams((prev) => ({ ...prev, page }));
         }}
         currentPage={page}
         onGlobalDelete={handleDeleteAll}
-        onCreateGlobal={() => navigate(`${currentRoute}/create`)}
-        actions={[{ type: 'delete' }]}
+        globalActions={[
+          {
+            content: 'Create',
+            onClick: () => navigate(`${currentRoute}/create`),
+          },
+        ]}
+        onSearch={(value) => setImageListParams((prev) => ({ ...prev, search: value }))}
+        onRefresh={() => queryClient.invalidateQueries({ queryKey: [`${keyImageList}`] })}
       />
     </>
   );

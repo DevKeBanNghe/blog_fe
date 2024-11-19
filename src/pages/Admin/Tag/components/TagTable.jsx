@@ -7,12 +7,15 @@ import { useNavigate } from 'react-router-dom';
 import useCurrentPage from 'hooks/useCurrentPage';
 import { STALE_TIME_GET_LIST } from 'common/consts/react-query.const';
 import CTTextTruncate from 'components/shared/CTTextTruncate';
+import { DEFAULT_PAGINATION } from 'common/consts/constants.const';
+import { useState } from 'react';
 
 function TagTable() {
   const navigate = useNavigate();
-  const { keyList } = useQueryKeys();
+  const { keyTagList: keyTagList } = useQueryKeys({ prefix: 'tagList' });
   const queryClient = useQueryClient();
-  const { id: currentTagId, queryParams, setQueryParams, queryParamsString, currentRoute } = useCurrentPage();
+  const { currentRoute } = useCurrentPage({ isPaging: false });
+  const [tagListParams, setTagListParams] = useState(DEFAULT_PAGINATION);
 
   const columns = [
     {
@@ -35,15 +38,12 @@ function TagTable() {
 
   const mutationDeleteTags = useMutation({
     mutationFn: deleteTags,
-    onSuccess: async ({ errors }, { ids }) => {
+    onSuccess: async ({ errors }) => {
       if (errors) return toast.error(errors);
-      toast.success('Delete success');
-      if (ids.includes(currentTagId)) {
-        return navigate(`${currentRoute}${queryParamsString}`);
-      }
       await queryClient.fetchQuery({
-        queryKey: [`${keyList}-${queryParams.page}`],
+        queryKey: [`${keyTagList}`, tagListParams],
       });
+      toast.success('Delete success');
     },
   });
 
@@ -52,8 +52,8 @@ function TagTable() {
   };
 
   const { data: queryGetTagListData = {} } = useQuery({
-    queryKey: [`${keyList}-${queryParams.page}`],
-    queryFn: () => getTagList(queryParams),
+    queryKey: [`${keyTagList}`, tagListParams],
+    queryFn: () => getTagList(tagListParams),
     staleTime: STALE_TIME_GET_LIST,
   });
   const { data, errors } = queryGetTagListData;
@@ -69,7 +69,7 @@ function TagTable() {
         rows={list}
         columns={columns}
         onChange={({ current: page }) => {
-          setQueryParams((prev) => ({ ...prev, page }));
+          setTagListParams((prev) => ({ ...prev, page }));
         }}
         currentPage={page}
         onGlobalDelete={handleDeleteAll}
@@ -79,6 +79,8 @@ function TagTable() {
             onClick: () => navigate(`${currentRoute}/create`),
           },
         ]}
+        onSearch={(value) => setTagListParams((prev) => ({ ...prev, search: value }))}
+        onRefresh={() => queryClient.invalidateQueries({ queryKey: [`${keyTagList}`] })}
       />
     </>
   );

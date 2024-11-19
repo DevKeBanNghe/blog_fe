@@ -8,12 +8,15 @@ import useCurrentPage from 'hooks/useCurrentPage';
 import { STALE_TIME_GET_LIST } from 'common/consts/react-query.const';
 import CTTextTruncate from 'components/shared/CTTextTruncate';
 import { Typography } from 'antd';
+import { DEFAULT_PAGINATION } from 'common/consts/constants.const';
+import { useState } from 'react';
 const { Text } = Typography;
 function BlogTable() {
   const navigate = useNavigate();
-  const { keyList } = useQueryKeys();
+  const { keyList: keyBlogList } = useQueryKeys({ prefix: 'blogList' });
   const queryClient = useQueryClient();
-  const { id: currentBlogId, queryParams, setQueryParams, queryParamsString, currentRoute } = useCurrentPage();
+  const { currentRoute } = useCurrentPage({ isPaging: false });
+  const [blogListParams, setBlogListParams] = useState(DEFAULT_PAGINATION);
 
   const columns = [
     {
@@ -57,15 +60,12 @@ function BlogTable() {
 
   const mutationDeleteBlogs = useMutation({
     mutationFn: deleteBlogs,
-    onSuccess: async ({ errors }, { ids }) => {
+    onSuccess: async ({ errors }) => {
       if (errors) return toast.error(errors);
-      toast.success('Delete success');
-      if (ids.includes(currentBlogId)) {
-        return navigate(`${currentRoute}${queryParamsString}`);
-      }
       await queryClient.fetchQuery({
-        queryKey: [`${keyList}-${queryParams.page}`],
+        queryKey: [`${keyBlogList}`, blogListParams],
       });
+      toast.success('Delete success');
     },
   });
 
@@ -74,8 +74,8 @@ function BlogTable() {
   };
 
   const { data: queryGetBlogListData = {} } = useQuery({
-    queryKey: [`${keyList}-${queryParams.page}`],
-    queryFn: () => getBlogList(queryParams),
+    queryKey: [`${keyBlogList}`, blogListParams],
+    queryFn: () => getBlogList(blogListParams),
     staleTime: STALE_TIME_GET_LIST,
   });
   const { data, errors } = queryGetBlogListData;
@@ -90,9 +90,7 @@ function BlogTable() {
         itemPerPage={itemPerPage}
         rows={list}
         columns={columns}
-        onChange={({ current: page }) => {
-          setQueryParams((prev) => ({ ...prev, page }));
-        }}
+        onChange={({ current: page }) => setBlogListParams((prev) => ({ ...prev, page }))}
         currentPage={page}
         onGlobalDelete={handleDeleteAll}
         globalActions={[
@@ -101,6 +99,8 @@ function BlogTable() {
             onClick: () => navigate(`${currentRoute}/create`),
           },
         ]}
+        onSearch={(value) => setBlogListParams((prev) => ({ ...prev, search: value }))}
+        onRefresh={() => queryClient.invalidateQueries({ queryKey: [`${keyBlogList}`] })}
       />
     </>
   );

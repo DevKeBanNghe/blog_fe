@@ -15,8 +15,9 @@ const CTTable = ({
   actions = [{ type: 'delete' }, { type: 'copy' }, { type: 'edit' }, { type: 'view' }],
   handleSelected = () => {},
   onGlobalDelete = () => {},
-  isSearch = true,
   globalActions = [],
+  onRefresh = () => {},
+  onSearch,
   ...props
 }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -25,7 +26,7 @@ const CTTable = ({
     if (columns.length === 0 || actions.length === 0) return columns;
 
     const column_action = {
-      title: 'Action',
+      title: 'Actions',
       key: 'operation',
       fixed: 'right',
       align: 'center',
@@ -77,13 +78,23 @@ const CTTable = ({
     ];
   }, [selectedRowKeys]);
 
+  const globalActionsDefault = useMemo(
+    () => [
+      {
+        content: 'Refresh',
+        onClick: onRefresh,
+      },
+    ],
+    [],
+  );
+
   return (
     <>
       <Row style={{ marginBottom: '10px' }}>
         <Col span={16}>
-          <GlobalActions actions={[...checkedGlobalButton, ...globalActions]} />
+          <GlobalActions actions={[...checkedGlobalButton, ...globalActionsDefault, ...globalActions]} />
         </Col>
-        <Col span={8}>{isSearch && <SearchBar />}</Col>
+        <Col span={8}>{onSearch && <SearchBar onSearch={onSearch} />}</Col>
       </Row>
 
       <Table
