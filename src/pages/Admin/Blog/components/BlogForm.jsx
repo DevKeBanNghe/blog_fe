@@ -50,7 +50,7 @@ function BlogFormRef({ isShowDefaultActions = true }, ref) {
     if (isCopy) delete values.blog_id;
     const payload = { ...values };
     currentBlogId && isEdit
-      ? mutationUpdateBlogs.mutate({ ...payload, blog_id: currentBlogId })
+      ? mutationUpdateBlogs.mutate({ ...payload, blog_is_publish: false, blog_id: currentBlogId })
       : mutationCreateBlogs.mutate({ ...payload, blog_reading_time: calBlogTimeReadingTime() });
   };
 
