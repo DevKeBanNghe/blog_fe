@@ -34,14 +34,14 @@ export default function Events() {
 
   const notificationLength = useMemo(() => notifications.filter((noti) => noti.key).length, [notifications]);
   return (
-    <Flex gap={'15px'} style={{ position: 'absolute', top: '25px', right: '30px' }}>
-      <CTDropdown items={notifications}>
+    <Flex gap={'middle'}>
+      <CTDropdown items={notifications} placement='topRight' arrow>
         <a onClick={(e) => e.preventDefault()}>
           <CTAvartar badgetValue={notificationLength} icon={<BellOutlined />} />
         </a>
       </CTDropdown>
 
-      <CTDropdown items={userInfo}>
+      <CTDropdown items={userInfo} placement='topRight' arrow>
         <a onClick={(e) => e.preventDefault()}>
           <CTAvartar badgetValue={0} icon={<UserOutlined />} />
         </a>

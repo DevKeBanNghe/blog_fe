@@ -27,7 +27,6 @@ export default function BlogDetail() {
     },
   });
 
-  console.log('🚀 ~ BlogDetail ~ currentBlogId:', currentBlogId);
   const { data: queryGetBlogDetail = {}, isFetched } = useQuery({
     queryKey: [keyDetail, currentBlogId],
     queryFn: () => getBlogDetailForUser(currentBlogId),

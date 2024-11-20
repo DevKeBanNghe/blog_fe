@@ -9,10 +9,29 @@ import { PERSONAL_BRAND, PREFIX_ADMIN_PAGE } from 'common/consts/constants.const
 import Socials from 'layouts/Socials';
 import { Controller, useForm } from 'react-hook-form';
 import usePageRedirect from 'hooks/usePageRedirect';
-// import Sign from './Sign';
-// import Events from './Events';
+import Sign from './Sign';
+import Events from './Events';
+import useUser from 'hooks/useUser';
+
+const UserMobile = () => {
+  const user = useUser();
+  return (
+    <Col xs={8} md={0}>
+      {user.user_name ? <Events /> : <Sign />}
+    </Col>
+  );
+};
+
+const UserDesktop = () => {
+  const user = useUser();
+  return (
+    <Col xs={0} md={2}>
+      {user.user_name ? <Events /> : <Sign />}
+    </Col>
+  );
+};
+
 export default function Header() {
-  // const user = useUser();
   const { control, setValue } = useForm();
   const headerRef = useRef();
   const { currentRoute, setQueryParams, queryParams } = useCurrentPage({ isPaging: false });
@@ -45,7 +64,7 @@ export default function Header() {
         justify={'center'}
         align='middle'
       >
-        <Col xs={0} span={4}></Col>
+        <Col xs={0} md={2}></Col>
         <Col xs={3} md={1}>
           <Image preview={false} style={{ cursor: 'pointer' }} width={75} src={Logo} onClick={handlePageReset} />
         </Col>
@@ -76,11 +95,13 @@ export default function Header() {
           </>
         ) : (
           <>
-            <Col span={1}></Col>
+            <Col xs={0} md={4}></Col>
             <Col xs={0} md={4}>
               <Socials />
             </Col>
-            <Col xs={16} md={5}>
+            <Col xs={0} md={1}></Col>
+            <UserMobile />
+            <Col xs={20} md={4}>
               <Controller
                 name='search'
                 control={control}
@@ -88,8 +109,9 @@ export default function Header() {
               />
             </Col>
 
-            <Col xs={0} span={4}></Col>
-            {/* <Col span={8}>{user.user_name ? <Events /> : <Sign />}</Col> */}
+            <Col xs={1} md={1}></Col>
+            <UserDesktop />
+            <Col xs={0} md={2}></Col>
           </>
         )}
       </Row>

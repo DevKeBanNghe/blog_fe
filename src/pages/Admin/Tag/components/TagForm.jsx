@@ -7,7 +7,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createTag, getTagDetail, updateTag } from '../service';
 import { DEFAULT_PAGINATION } from 'common/consts/constants.const';
 import useQueryKeys from 'hooks/useQueryKeys';
-import CTInput from 'components/shared/CTInput';
+import CTInputTextArea from 'components/shared/CTInput/TextArea';
 import useCurrentPage from 'hooks/useCurrentPage';
 
 function TagFormRef({ isShowDefaultActions = true, isFormModal = !isShowDefaultActions }, ref) {
@@ -49,13 +49,13 @@ function TagFormRef({ isShowDefaultActions = true, isFormModal = !isShowDefaultA
     {
       field: 'tag_name',
       render: ({ field }) => {
-        return <CTInput {...field} placeholder={'Tag name'} />;
+        return <CTInputTextArea {...field} placeholder={'Tag name'} />;
       },
     },
     {
       field: 'tag_description',
       render: ({ field }) => {
-        return <CTInput {...field} placeholder={'Tag description'} />;
+        return <CTInputTextArea {...field} placeholder={'Tag description'} />;
       },
     },
   ];

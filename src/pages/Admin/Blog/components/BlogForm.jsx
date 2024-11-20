@@ -12,7 +12,7 @@ import { PlusCircleFilled } from '@ant-design/icons';
 import CTIcon from 'components/shared/CTIcon';
 import CTDebounceSelect from 'components/shared/CTDebounceSelect';
 import useQueryKeys from 'hooks/useQueryKeys';
-import CTInput from 'components/shared/CTInput';
+import CTInputTextArea from 'components/shared/CTInput/TextArea';
 import useCurrentPage from 'hooks/useCurrentPage';
 import FormItem from 'antd/es/form/FormItem';
 import CTMarkdown from 'components/shared/CTMarkdown';
@@ -91,7 +91,7 @@ function BlogFormRef({ isShowDefaultActions = true }, ref) {
           <>
             <Row>
               <Col span={13}>
-                <CTInput formStateErrors={formStateErrors} {...field} placeholder='Blog Title' />
+                <CTInputTextArea formStateErrors={formStateErrors} {...field} placeholder='Blog Title' />
               </Col>
               <Col span={1}></Col>
               <Col span={10}>
@@ -134,16 +134,15 @@ function BlogFormRef({ isShowDefaultActions = true }, ref) {
     {
       field: 'blog_thumbnail',
       render: ({ field }) => {
-        return <CTInput {...field} placeholder={'Blog Thumbnail Url'} />;
+        return <CTInputTextArea {...field} placeholder={'Blog Thumbnail Url'} />;
       },
     },
     {
       field: 'blog_description',
       render: ({ field }) => {
-        return <CTInput {...field} placeholder={'Blog description'} />;
+        return <CTInputTextArea {...field} placeholder={'Blog description'} />;
       },
     },
-
     {
       field: 'blog_content',
       render: ({ field }) => {
@@ -170,7 +169,7 @@ function BlogFormRef({ isShowDefaultActions = true }, ref) {
                       {isPreview ? (
                         <CTMarkdown>{field.value}</CTMarkdown>
                       ) : (
-                        <CTInput {...field} placeholder={'Blog content'} />
+                        <CTInputTextArea {...field} placeholder={'Blog content'} />
                       )}
                     </>
                   ),
