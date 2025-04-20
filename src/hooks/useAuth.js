@@ -16,7 +16,7 @@ export default function useAuth() {
   }, [params, currentRoute]);
 
   const isAllowed = useMemo(() => {
-    if (user.isAdmin) return true;
+    if (user.is_supper_admin) return true;
     return routers.some((router) => {
       return (
         router.path === pathHasParams &&

@@ -1,7 +1,8 @@
 import { Button, Result } from 'antd';
+import useInterval from 'hooks/useInterval';
 import usePageRedirect from 'hooks/usePageRedirect';
-import { useRef } from 'react';
-import { useLocation, useRouteError } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate, useRouteError } from 'react-router-dom';
 
 const statusInstance = [
   { status: 404, title: 'Not Found' },
@@ -14,10 +15,19 @@ const Errors = () => {
   const { state } = useLocation();
   const statusRef = useRef(state?.status_code ?? 404);
   const { goToHomePage } = usePageRedirect();
+  const [timeRedirect, setTimeRedirect] = useState(10);
+  const navigate = useNavigate();
 
   if (error) statusRef.current = 500;
 
   const { status, title } = statusInstance.find((item) => item.status === statusRef.current);
+
+  useInterval(() => setTimeRedirect((prev) => prev - 1));
+
+  useEffect(() => {
+    if (timeRedirect === 0) return navigate('/');
+  }, [timeRedirect]);
+
   return (
     <Result
       status={status}
@@ -25,7 +35,7 @@ const Errors = () => {
       subTitle={title}
       extra={
         <Button onClick={goToHomePage} type='primary'>
-          Back Home
+          Back Home (redirect after {timeRedirect}s)
         </Button>
       }
     />

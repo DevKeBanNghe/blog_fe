@@ -1,4 +1,4 @@
-import { Card, Col, Collapse, Row, Switch } from 'antd';
+import { Alert, Card, Col, Collapse, Flex, Row, Switch, Typography } from 'antd';
 import CTForm from 'components/shared/CTForm';
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import CTModal from 'components/shared/CTModal';
@@ -19,8 +19,10 @@ import CTMarkdown from 'components/shared/CTMarkdown';
 import TagForm from 'pages/Admin/Tag/components/TagForm';
 import { getTagOptions } from 'pages/Admin/Tag/service';
 import markdownToTxt from 'markdown-to-txt';
+import { REQUIRED_FIELD_TEMPLATE } from 'common/templates/rules.template';
+const { Link } = Typography;
 
-function BlogFormRef({ isShowDefaultActions = true }, ref) {
+function BlogFormRef({ isShowActionDefault = true }, ref) {
   const [isOpenTagModal, setIsOpenTagModal] = useState(false);
   const { keyList, keyDetail } = useQueryKeys();
   const { id: currentBlogId, isEdit, setQueryParams, isCopy } = useCurrentPage({ isPaging: false });
@@ -50,7 +52,7 @@ function BlogFormRef({ isShowDefaultActions = true }, ref) {
     if (isCopy) delete values.blog_id;
     const payload = { ...values };
     currentBlogId && isEdit
-      ? mutationUpdateBlogs.mutate({ ...payload, blog_is_publish: false, blog_id: currentBlogId })
+      ? mutationUpdateBlogs.mutate({ ...payload, blog_is_publish: 0, blog_id: currentBlogId })
       : mutationCreateBlogs.mutate({ ...payload, blog_reading_time: calBlogTimeReadingTime() });
   };
 
@@ -84,7 +86,7 @@ function BlogFormRef({ isShowDefaultActions = true }, ref) {
     {
       field: 'blog_title',
       rules: {
-        required: 'Please input your new blog_title!',
+        required: REQUIRED_FIELD_TEMPLATE,
       },
       render: ({ field }) => {
         return (
@@ -145,6 +147,9 @@ function BlogFormRef({ isShowDefaultActions = true }, ref) {
     },
     {
       field: 'blog_content',
+      rules: {
+        required: REQUIRED_FIELD_TEMPLATE,
+      },
       render: ({ field }) => {
         return (
           <>
@@ -156,18 +161,34 @@ function BlogFormRef({ isShowDefaultActions = true }, ref) {
                   label: 'Blog content',
                   children: (
                     <>
-                      <Switch
-                        style={{ float: 'right', marginBottom: '10px' }}
-                        checkedChildren='preview'
-                        unCheckedChildren='code'
-                        checked={isPreview}
-                        onClick={() => {
-                          if (!watch('blog_content')) return;
-                          setIsPreview(!isPreview);
-                        }}
-                      />
+                      <Flex justify='space-between' style={{ marginBottom: '20px' }}>
+                        <Alert
+                          message={
+                            <>
+                              Usage Markdown:{' '}
+                              <Link href='https://www.markdownguide.org/basic-syntax/' target='_blank'>
+                                Click here
+                              </Link>
+                            </>
+                          }
+                          type='warning'
+                        />
+                        <Switch
+                          style={{ float: 'right', marginBottom: '10px' }}
+                          checkedChildren='preview'
+                          unCheckedChildren='code'
+                          checked={isPreview}
+                          onClick={() => {
+                            if (!watch('blog_content')) return;
+                            setIsPreview(!isPreview);
+                          }}
+                        />
+                      </Flex>
+
                       {isPreview ? (
-                        <CTMarkdown>{field.value}</CTMarkdown>
+                        <Card style={{ border: '1px solid' }}>
+                          <CTMarkdown>{field.value}</CTMarkdown>
+                        </Card>
                       ) : (
                         <CTInputTextArea {...field} placeholder={'Blog content'} />
                       )}
@@ -221,13 +242,13 @@ function BlogFormRef({ isShowDefaultActions = true }, ref) {
   const blogActions = [
     {
       content: buttonContent,
-      is_hidden: isEdit ? 0 : 1,
+      hidden: isEdit ? 0 : 1,
       type: 'button',
       style: {
         backgroundColor: buttonColor,
       },
       onClick: async () => {
-        mutationPublishBlogs.mutate({ blog_id: currentBlogId, blog_is_publish: !isPublish });
+        mutationPublishBlogs.mutate({ blog_id: currentBlogId, blog_is_publish: Number(!isPublish) });
       },
     },
   ];
@@ -242,7 +263,7 @@ function BlogFormRef({ isShowDefaultActions = true }, ref) {
               items={formItems}
               global_control={control}
               onSubmit={handleSubmit(onSubmit)}
-              isShowDefaultActions={isShowDefaultActions}
+              isShowActionDefault={isShowActionDefault}
               actions={blogActions}
             />
           </Card>
@@ -252,7 +273,7 @@ function BlogFormRef({ isShowDefaultActions = true }, ref) {
             onCancel={() => setIsOpenTagModal(false)}
             onOk={() => tagFormRef.current.onSubmit()}
           >
-            <TagForm ref={tagFormRef} isShowDefaultActions={false} />
+            <TagForm ref={tagFormRef} isModal={true} />
           </CTModal>
         </Col>
       </Row>

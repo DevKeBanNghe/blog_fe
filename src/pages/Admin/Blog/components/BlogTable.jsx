@@ -1,22 +1,17 @@
 import CTTable from 'components/shared/CTTable';
-import useQueryKeys from 'hooks/useQueryKeys';
-import { deleteBlogs, getBlogList } from '../service';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { deleteBlogs, exportBlogs, getBlogList, toggleBlogsActive } from '../service';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'common/utils';
 import { useNavigate } from 'react-router-dom';
-import useCurrentPage from 'hooks/useCurrentPage';
-import { STALE_TIME_GET_LIST } from 'common/consts/react-query.const';
 import CTTextTruncate from 'components/shared/CTTextTruncate';
 import { Typography } from 'antd';
-import { DEFAULT_PAGINATION } from 'common/consts/constants.const';
-import { useState } from 'react';
+import useGetList from 'hooks/useGetList';
+import useCurrentPage from 'hooks/useCurrentPage';
 const { Text } = Typography;
 function BlogTable() {
   const navigate = useNavigate();
-  const { keyList: keyBlogList } = useQueryKeys({ prefix: 'blogList' });
   const queryClient = useQueryClient();
   const { currentRoute } = useCurrentPage({ isPaging: false });
-  const [blogListParams, setBlogListParams] = useState(DEFAULT_PAGINATION);
 
   const columns = [
     {
@@ -58,12 +53,18 @@ function BlogTable() {
     },
   ];
 
+  const {
+    data: { totalItems, itemPerPage, list, page },
+    queryKey: queryKeyGetBlogList,
+    isLoading,
+  } = useGetList({ func: getBlogList });
+
   const mutationDeleteBlogs = useMutation({
     mutationFn: deleteBlogs,
     onSuccess: async ({ errors }) => {
       if (errors) return toast.error(errors);
       await queryClient.fetchQuery({
-        queryKey: [`${keyBlogList}`, blogListParams],
+        queryKey: queryKeyGetBlogList,
       });
       toast.success('Delete success');
     },
@@ -73,34 +74,40 @@ function BlogTable() {
     mutationDeleteBlogs.mutate({ ids });
   };
 
-  const { data: queryGetBlogListData = {} } = useQuery({
-    queryKey: [`${keyBlogList}`, blogListParams],
-    queryFn: () => getBlogList(blogListParams),
-    staleTime: STALE_TIME_GET_LIST,
+  const mutationToggleBlogsActive = useMutation({
+    mutationFn: toggleBlogsActive,
+    onSuccess: async ({ errors }) => {
+      if (errors) return toast.error(errors);
+      toast.success('Update activate status success!');
+      await queryClient.invalidateQueries({
+        queryKey: queryKeyGetBlogList,
+      });
+    },
   });
-  const { data, errors } = queryGetBlogListData;
-  if (errors) toast.error(errors);
-  const { totalItems, itemPerPage, list, page } = data ?? {};
+  const handleToggleBlogsActive = async ({ ids = [], is_active }) =>
+    mutationToggleBlogsActive.mutate({ blog_ids: ids, is_active });
+
+  const handleExportExcel = async (ids = []) => exportBlogs({ ids });
 
   return (
     <>
       <CTTable
+        loading={isLoading}
         rowKey={'blog_id'}
         totalItems={totalItems}
         itemPerPage={itemPerPage}
         rows={list}
         columns={columns}
-        onChange={({ current: page }) => setBlogListParams((prev) => ({ ...prev, page }))}
         currentPage={page}
         onGlobalDelete={handleDeleteAll}
+        onGlobalExport={handleExportExcel}
+        onGlobalToggleActive={handleToggleBlogsActive}
         globalActions={[
           {
             content: 'Create',
             onClick: () => navigate(`${currentRoute}/create`),
           },
         ]}
-        onSearch={(value) => setBlogListParams((prev) => ({ ...prev, page: 1, search: value }))}
-        onRefresh={() => queryClient.invalidateQueries({ queryKey: [`${keyBlogList}`] })}
       />
     </>
   );

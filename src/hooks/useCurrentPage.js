@@ -1,4 +1,4 @@
-import { DEFAULT_PAGINATION } from 'common/consts/constants.const';
+import { DEFAULT_PAGINATION, PREFIX_ADMIN_PAGE } from 'common/consts/constants.const';
 import { isFunction } from 'lodash';
 import { useEffect, useMemo } from 'react';
 import { useParams, useResolvedPath, useSearchParams } from 'react-router-dom';
@@ -6,8 +6,15 @@ import { useParams, useResolvedPath, useSearchParams } from 'react-router-dom';
 export default function useCurrentPage({ keyIdParams = 'id', isPaging = true, customIdParams } = {}) {
   const [searchParams, setSearchParams] = useSearchParams();
   const { pathname } = useResolvedPath();
-  const currentRootRouteIndex = pathname.indexOf(import.meta.env.VITE_APP_PREFIX, 1);
-  const currentRootRoute = currentRootRouteIndex >= 0 ? pathname.slice(0, currentRootRouteIndex) : pathname;
+  const isAdminPage = pathname.includes(PREFIX_ADMIN_PAGE);
+  const getCurrentRootRoute = () => {
+    let currentRootRouteIndex = pathname.indexOf(import.meta.env.VITE_APP_PREFIX, 1);
+    if (isAdminPage) {
+      currentRootRouteIndex = pathname.indexOf('/', currentRootRouteIndex + 1);
+    }
+    return currentRootRouteIndex >= 0 ? pathname.slice(0, currentRootRouteIndex) : pathname;
+  };
+  const currentRootRoute = getCurrentRootRoute();
   const params = useParams();
 
   const isEdit = pathname.includes('edit');
@@ -68,5 +75,6 @@ export default function useCurrentPage({ keyIdParams = 'id', isPaging = true, cu
     queryParamsPagingStringDefault,
     queryParams,
     setQueryParams,
+    isAdminPage,
   };
 }

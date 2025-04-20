@@ -1,5 +1,5 @@
-const mappingValueReducer = ({ state, payload, initialState }) => {
-  for (const field of Object.keys(initialState)) {
+const mappingValueReducer = ({ state, payload = {} }) => {
+  for (const field of Object.keys(payload)) {
     state[field] = payload[field];
   }
   return state;

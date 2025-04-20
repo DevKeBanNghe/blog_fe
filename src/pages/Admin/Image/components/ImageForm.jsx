@@ -1,13 +1,14 @@
-import { Card, Col, Collapse, Row } from 'antd';
+import { Card, Col, Row } from 'antd';
 import CTForm from 'components/shared/CTForm';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'common/utils';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { uploadImages } from '../service';
 import ImageUpload from './ImageUpload';
 import { toFormData } from 'common/utils/file.util';
+import { forwardRef, useImperativeHandle } from 'react';
 
-function ImageForm() {
+function ImageFormRef({ isModal = false, queryKeyFetchListTable }, ref) {
   const methods = useForm();
   const { control, handleSubmit } = methods;
   const onSubmit = async (values) => {
@@ -15,33 +16,23 @@ function ImageForm() {
     mutationUploadImages.mutate(formData);
   };
 
+  useImperativeHandle(ref, () => ({
+    onSubmit: handleSubmit(onSubmit),
+  }));
+
+  const queryClient = useQueryClient();
   const mutationUploadImages = useMutation({
     mutationFn: uploadImages,
     onSuccess: async ({ errors }) => {
       if (errors) return toast.error(errors);
+      queryClient.invalidateQueries({ queryKey: queryKeyFetchListTable });
       return toast.success(`Upload successful`);
     },
   });
+
   const formItems = [
     {
-      render: () => {
-        return (
-          <Collapse
-            defaultActiveKey={'1'}
-            items={[
-              {
-                key: '1',
-                label: 'Image Upload',
-                children: (
-                  <>
-                    <ImageUpload />
-                  </>
-                ),
-              },
-            ]}
-          />
-        );
-      },
+      render: () => <ImageUpload />,
     },
   ];
 
@@ -51,7 +42,13 @@ function ImageForm() {
         <Row justify={'center'}>
           <Col span={20}>
             <Card style={{ width: '100%' }}>
-              <CTForm name='image-form' items={formItems} global_control={control} onSubmit={handleSubmit(onSubmit)} />
+              <CTForm
+                name='image-form'
+                items={formItems}
+                global_control={control}
+                onSubmit={handleSubmit(onSubmit)}
+                isShowActionDefault={isModal ? false : true}
+              />
             </Card>
           </Col>
         </Row>
@@ -59,5 +56,7 @@ function ImageForm() {
     </>
   );
 }
+
+const ImageForm = forwardRef(ImageFormRef);
 
 export default ImageForm;

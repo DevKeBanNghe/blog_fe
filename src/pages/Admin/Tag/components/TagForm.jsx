@@ -3,15 +3,16 @@ import CTForm from 'components/shared/CTForm';
 import { forwardRef, useEffect, useImperativeHandle } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'common/utils';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createTag, getTagDetail, updateTag } from '../service';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createTag, getTagDetail, importUrl, updateTag } from '../service';
 import { DEFAULT_PAGINATION } from 'common/consts/constants.const';
-import useQueryKeys from 'hooks/useQueryKeys';
 import CTInputTextArea from 'components/shared/CTInput/TextArea';
 import useCurrentPage from 'hooks/useCurrentPage';
+import useGetDetail from 'hooks/useGetDetail';
+import CTUploadButton from 'components/shared/CTButton/CTUploadButton';
+import { REQUIRED_FIELD_TEMPLATE } from 'common/templates/rules.template';
 
-function TagFormRef({ isShowDefaultActions = true, isFormModal = !isShowDefaultActions }, ref) {
-  const { keyList, keyDetail } = useQueryKeys({ prefix: isFormModal ? 'tag_modal' : '' });
+function TagFormRef({ isModal = false, queryKeyFetchListTable }, ref) {
   const { id: currentTagId, isEdit, setQueryParams, isCopy } = useCurrentPage({ isPaging: false });
 
   useImperativeHandle(ref, () => ({
@@ -22,7 +23,7 @@ function TagFormRef({ isShowDefaultActions = true, isFormModal = !isShowDefaultA
   const onSubmit = async (values) => {
     if (isCopy) delete values.tag_id;
     const payload = { ...values };
-    currentTagId && isEdit && !isFormModal
+    currentTagId && isEdit
       ? mutationUpdateTags.mutate({ ...payload, tag_id: currentTagId })
       : mutationCreateTags.mutate(payload);
   };
@@ -32,7 +33,7 @@ function TagFormRef({ isShowDefaultActions = true, isFormModal = !isShowDefaultA
     if (errors) return toast.error(errors);
     toast.success(`${currentTagId && isEdit ? 'Update' : 'Create'} successful`);
     setQueryParams((prev) => ({ ...prev, ...DEFAULT_PAGINATION }));
-    queryClient.invalidateQueries({ queryKey: [`${keyList}-${DEFAULT_PAGINATION.page}`] });
+    queryClient.invalidateQueries({ queryKey: queryKeyFetchListTable });
   };
   const mutationCreateTags = useMutation({
     mutationFn: createTag,
@@ -45,9 +46,27 @@ function TagFormRef({ isShowDefaultActions = true, isFormModal = !isShowDefaultA
     mutationFn: updateTag,
     onSuccess: handleSubmitSuccess,
   });
+
+  const handleImport = ({ file }) => {
+    if (file.status === 'done') {
+      toast.success(`${file.name} file uploaded successfully`);
+      queryClient.invalidateQueries({ queryKey: queryKeyFetchListTable });
+    } else if (file.status === 'error') {
+      toast.error(`${file.name} file upload failed.`);
+    }
+  };
+
   const formItems = [
     {
+      render: () => {
+        return <CTUploadButton content='Import' apiUrl={importUrl} onChange={handleImport} />;
+      },
+    },
+    {
       field: 'tag_name',
+      rules: {
+        required: REQUIRED_FIELD_TEMPLATE,
+      },
       render: ({ field }) => {
         return <CTInputTextArea {...field} placeholder={'Tag name'} />;
       },
@@ -60,13 +79,7 @@ function TagFormRef({ isShowDefaultActions = true, isFormModal = !isShowDefaultA
     },
   ];
 
-  const { data: queryGetTagDetail = {} } = useQuery({
-    queryKey: [`${keyDetail}`, currentTagId],
-    queryFn: () => getTagDetail(currentTagId),
-    enabled: currentTagId && !isFormModal ? true : false,
-  });
-  const { data: dataGetTagDetail } = queryGetTagDetail;
-
+  const { data: dataGetTagDetail } = useGetDetail({ func: getTagDetail });
   useEffect(() => {
     if (!dataGetTagDetail) return () => {};
     setFocus('tag_name');
@@ -83,7 +96,7 @@ function TagFormRef({ isShowDefaultActions = true, isFormModal = !isShowDefaultA
               items={formItems}
               global_control={control}
               onSubmit={handleSubmit(onSubmit)}
-              isShowDefaultActions={isShowDefaultActions}
+              isShowActionDefault={isModal ? false : true}
             />
           </Card>
         </Col>

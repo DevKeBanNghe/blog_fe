@@ -1,10 +1,19 @@
 import { Input } from 'antd';
-import { forwardRef } from 'react';
+import useCurrentPage from 'hooks/useCurrentPage';
 const { Search } = Input;
 
-function SearchBarRef({ onSearch, ...props } = {}, ref) {
-  return <Search ref={ref} placeholder='Tìm kiếm' allowClear size='large' onSearch={onSearch} {...props} />;
+function SearchBar({ onSearch, ...props }) {
+  const { queryParams } = useCurrentPage({ isPaging: false });
+  return (
+    <Search
+      defaultValue={queryParams?.search}
+      placeholder='Search'
+      allowClear
+      size='large'
+      onSearch={onSearch}
+      {...props}
+    />
+  );
 }
 
-const SearchBar = forwardRef(SearchBarRef);
 export default SearchBar;

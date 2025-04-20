@@ -1,12 +1,19 @@
-import { FormProvider, useForm } from 'react-hook-form';
+import { Col, Row } from 'antd';
 import TagTable from '../components/TagTable';
+import TagForm from '../components/TagForm';
+import { useRef } from 'react';
 
 export default function Tags() {
-  const methods = useForm();
-
+  const tableRef = useRef();
   return (
-    <FormProvider {...methods}>
-      <TagTable />
-    </FormProvider>
+    <Row>
+      <Col span={'7'}>
+        <TagForm queryKeyFetchListTable={tableRef.current?.queryKey} />
+      </Col>
+      <Col span={'1'}></Col>
+      <Col span={'16'}>
+        <TagTable ref={tableRef} />
+      </Col>
+    </Row>
   );
 }

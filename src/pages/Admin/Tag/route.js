@@ -1,6 +1,5 @@
 import React from 'react';
 import { ROOT_ROUTE } from './const';
-import TagForm from './components/TagForm';
 const Tags = React.lazy(() => import('./pages'));
 
 const tagsAdminRouters = [
@@ -14,25 +13,25 @@ const tagsAdminRouters = [
   {
     path: `${ROOT_ROUTE}/:id`,
     permission: 'SYS_ANNOUNCE_VIEW',
-    component: TagForm,
+    component: Tags,
     name: 'Tag detail',
   },
   {
     path: `${ROOT_ROUTE}/create`,
     permission: 'SYS_ANNOUNCE_VIEW',
-    component: TagForm,
+    component: Tags,
     name: 'Tag create',
   },
   {
     path: `${ROOT_ROUTE}/edit/:id`,
     permission: 'SYS_ANNOUNCE_VIEW',
-    component: TagForm,
+    component: Tags,
     name: 'Tag edit',
   },
   {
     path: `${ROOT_ROUTE}/copy/:id`,
     permission: 'SYS_ANNOUNCE_VIEW',
-    component: TagForm,
+    component: Tags,
     name: 'Tag copy',
   },
 ];

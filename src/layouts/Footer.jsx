@@ -32,6 +32,7 @@ const Footer = () => {
   });
 
   const onSubscribe = (values) => mutationSubscribe.mutate(values);
+  const isDisabledSubscribe = mutationSubscribe.isPending;
 
   const formItems = [
     {
@@ -46,8 +47,12 @@ const Footer = () => {
       render: ({ field }) => {
         return (
           <Flex gap={'small'} justify='right'>
-            <CTInput formStateErrors={formStateErrors} {...field} placeholder={'Đăng kí nhận blogs sớm nhất'} />
-            <CTButton disabled={mutationSubscribe.isPending} size='large' htmlType={'submit'}>
+            <CTInput
+              formStateErrors={formStateErrors}
+              {...field}
+              placeholder={'Đăng kí gmail nhận bài viết sớm nhất'}
+            />
+            <CTButton disabled={isDisabledSubscribe} size='large' htmlType={'submit'}>
               Subscribe
             </CTButton>
           </Flex>
@@ -75,8 +80,9 @@ const Footer = () => {
             name='subscribe-form'
             items={formItems}
             global_control={control}
-            isShowDefaultActions={false}
+            isShowActionDefault={false}
             onSubmit={handleSubmit(onSubscribe)}
+            disabled={isDisabledSubscribe}
           />
         </Col>
       </Row>
