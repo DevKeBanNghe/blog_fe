@@ -11,8 +11,9 @@ import { forwardRef, useImperativeHandle } from 'react';
 function ImageFormRef({ isModal = false, queryKeyFetchListTable }, ref) {
   const methods = useForm();
   const { control, handleSubmit } = methods;
-  const onSubmit = async (values) => {
-    const formData = toFormData(values.file_list.map((item) => item.originFileObj));
+  const onSubmit = async ({ file_list = [] }) => {
+    if (file_list.length === 0) return toast.error('Images upload is empty!');
+    const formData = toFormData(file_list.map((item) => item.originFileObj));
     mutationUploadImages.mutate(formData);
   };
 
