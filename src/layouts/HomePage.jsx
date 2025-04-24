@@ -8,6 +8,7 @@ import useUser from 'hooks/useUser';
 import useAuth from 'hooks/useAuth';
 import useCurrentPage from 'hooks/useCurrentPage';
 import { redirectTo } from 'common/utils/common.util';
+import { api } from 'common/utils';
 const { Content } = Layout;
 const { VITE_SSO_URL: SSO_URL, VITE_WEBPAGE_KEY: WEBPAGE_KEY } = import.meta.env;
 
@@ -33,9 +34,13 @@ const HomePage = () => {
   const navigate = useNavigate();
   const user = useUser();
   const { isAllowed } = useAuth();
-  const { currentRoute, currentRootRoute, isAdminPage } = useCurrentPage({ isPaging: false });
+  const { currentRoute, currentRootRoute, isAdminPage, queryParams } = useCurrentPage({ isPaging: false });
 
   useEffect(() => {
+    const user_id_redirect = queryParams.user_id;
+    if (user_id_redirect) {
+      return api.get(`/auth/refresh-token`, { params: { user_id: user_id_redirect } });
+    }
     if (user.loading) return;
     if (currentRootRoute === '/') return;
     if (!isAllowed) {
