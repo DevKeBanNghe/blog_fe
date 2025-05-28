@@ -1,8 +1,8 @@
 import { Flex, Typography } from 'antd';
 import CTAvartar from 'components/shared/CTAvartar';
 import CTDropdown from 'components/shared/CTDropdown';
-import { useMemo, useState } from 'react';
-import { BellOutlined, UserOutlined } from '@ant-design/icons';
+import { useState } from 'react';
+import { UserOutlined } from '@ant-design/icons';
 import { api, toast } from 'common/utils';
 import { redirectTo } from 'common/utils/common.util';
 const { Link } = Typography;
@@ -29,28 +29,28 @@ export default function Events() {
       key: '2',
     },
   ]);
-  const [notifications] = useState([
-    {
-      label: '1st noti',
-      key: '0',
-    },
-    {
-      type: 'divider',
-    },
-    {
-      label: '2rd noti',
-      key: '1',
-    },
-  ]);
+  // const [notifications] = useState([
+  //   {
+  //     label: '1st noti',
+  //     key: '0',
+  //   },
+  //   {
+  //     type: 'divider',
+  //   },
+  //   {
+  //     label: '2rd noti',
+  //     key: '1',
+  //   },
+  // ]);
 
-  const notificationLength = useMemo(() => notifications.filter((noti) => noti.key).length, [notifications]);
+  // const notificationLength = useMemo(() => notifications.filter((noti) => noti.key).length, [notifications]);
   return (
     <Flex gap={'middle'}>
-      <CTDropdown items={notifications} placement='topRight' arrow>
+      {/* <CTDropdown items={notifications} placement='topRight' arrow>
         <a onClick={(e) => e.preventDefault()}>
           <CTAvartar badgetValue={notificationLength} icon={<BellOutlined />} />
         </a>
-      </CTDropdown>
+      </CTDropdown> */}
 
       <CTDropdown items={userInfo} placement='topRight' arrow>
         <a onClick={(e) => e.preventDefault()}>
