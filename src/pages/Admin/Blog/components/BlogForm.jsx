@@ -20,12 +20,13 @@ import TagForm from 'pages/Admin/Tag/components/TagForm';
 import { getTagOptions } from 'pages/Admin/Tag/service';
 import markdownToTxt from 'markdown-to-txt';
 import { REQUIRED_FIELD_TEMPLATE } from 'common/templates/rules.template';
+import { BLOG_CONTENT_DEFAULT } from '../const';
 const { Link } = Typography;
 
 function BlogFormRef({ isShowActionDefault = true }, ref) {
   const [isOpenTagModal, setIsOpenTagModal] = useState(false);
   const { keyList, keyDetail } = useQueryKeys();
-  const { id: currentBlogId, isEdit, setQueryParams, isCopy } = useCurrentPage({ isPaging: false });
+  const { id: currentBlogId, isEdit, setQueryParams, isCopy, isCreate } = useCurrentPage({ isPaging: false });
   const tagFormRef = useRef();
   const [isPreview, setIsPreview] = useState(false);
 
@@ -40,7 +41,11 @@ function BlogFormRef({ isShowActionDefault = true }, ref) {
     formState: { errors: formStateErrors },
     setFocus,
     watch,
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      blog_content: isCreate ? BLOG_CONTENT_DEFAULT : '',
+    },
+  });
 
   const calBlogTimeReadingTime = () => {
     const wordsPerMinute = 200;

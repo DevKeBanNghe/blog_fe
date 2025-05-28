@@ -1,7 +1,6 @@
 import { Col, Flex, Image, List, Row, Space, Typography } from 'antd';
 import Link from 'antd/es/typography/Link';
 import { useNavigate } from 'react-router-dom';
-const { Item } = List;
 import Logo from '/logo.png';
 import { useMemo, useRef } from 'react';
 import { ROOT_ROUTE } from '../const';
@@ -10,6 +9,7 @@ import CTTextTruncate from 'components/shared/CTTextTruncate';
 import { styled } from 'styled-components';
 import { removeDiacritics } from 'common/utils';
 import { lowerCase } from 'lodash';
+const { Item } = List;
 const { Title } = Typography;
 
 const StyledItem = styled(Item)`
@@ -47,7 +47,7 @@ function BlogItem({
   const actions = [
     {
       icon: CalendarFilled,
-      value: created_at,
+      value: created_at?.split(', ')?.[0],
     },
     {
       icon: ReadFilled,
