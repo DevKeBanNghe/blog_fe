@@ -35,7 +35,6 @@ const refreshToken = async () => {
       throw new Error('Max refresh token retries!');
     }
 
-    // Return existing promise if refresh is in progress
     if (refreshTokenState.promise) {
       return refreshTokenState.promise;
     }

@@ -32,7 +32,6 @@ export const blogSlice = createSlice({
   },
 });
 
-// Action creators are generated for each case reducer function
 export const { setBlog } = blogSlice.actions;
 
 export default blogSlice.reducer;

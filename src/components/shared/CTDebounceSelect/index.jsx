@@ -1,8 +1,8 @@
-import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Select, Spin } from 'antd';
 import debounce from 'lodash/debounce';
 import CTErrorMessage from '../CTErrorMessage';
-const DebounceSelect = ({ fetchOptions = async () => {}, debounceTimeout = 800, ...props }, ref) => {
+const DebounceSelect = ({ fetchOptions = async () => {}, debounceTimeout = 800, ...props }) => {
   const [fetching, setFetching] = useState(false);
   const [options, setOptions] = useState([]);
   const fetchRef = useRef(0);
@@ -30,7 +30,6 @@ const DebounceSelect = ({ fetchOptions = async () => {}, debounceTimeout = 800, 
 
   return (
     <Select
-      ref={ref}
       showSearch={true}
       filterOption={false}
       onSearch={debounceFetcher}
@@ -42,6 +41,6 @@ const DebounceSelect = ({ fetchOptions = async () => {}, debounceTimeout = 800, 
   );
 };
 
-const CTDebounceSelect = CTErrorMessage(forwardRef(DebounceSelect));
+const CTDebounceSelect = CTErrorMessage(DebounceSelect);
 
 export default CTDebounceSelect;

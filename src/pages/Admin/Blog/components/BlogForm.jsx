@@ -107,11 +107,11 @@ function BlogFormRef({ isShowActionDefault = true }, ref) {
                     <Controller
                       control={control}
                       name={'tag_ids'}
-                      render={({ field }) => {
+                      render={({ field: { value } }) => {
                         return (
                           <FormItem>
                             <CTDebounceSelect
-                              {...field}
+                              value={value}
                               mode={'multiple'}
                               formStateErrors={formStateErrors}
                               placeholder={'Select tags'}

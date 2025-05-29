@@ -34,17 +34,21 @@ const HomePage = () => {
   const navigate = useNavigate();
   const user = useUser();
   const { isAllowed } = useAuth();
-  const { currentRoute, currentRootRoute, isAdminPage, queryParams } = useCurrentPage({ isPaging: false });
+  const { currentRoute, isAdminPage, queryParams } = useCurrentPage({ isPaging: false });
 
   useEffect(() => {
     const user_id_redirect = queryParams.user_id;
     if (user_id_redirect) {
-      return api.get(`/auth/refresh-token`, { params: { user_id: user_id_redirect } });
+      return () => {
+        api.get(`/auth/refresh-token`, { params: { user_id: user_id_redirect } });
+      };
     }
-    if (user.loading) return;
-    if (currentRootRoute === '/') return;
+    if (user.loading) return () => {};
     if (!isAllowed) {
-      if (!user.user_name) return redirectTo(`${SSO_URL}sign-in?webpage_key=${WEBPAGE_KEY}`);
+      if (!user.user_name)
+        return () => {
+          redirectTo(`${SSO_URL}sign-in?webpage_key=${WEBPAGE_KEY}`);
+        };
       navigate('error', {
         state: {
           status_code: 403,

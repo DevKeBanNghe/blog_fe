@@ -2,7 +2,6 @@ import { Flex, Col, Row, Image } from 'antd';
 import TabHeader from './TabHeader';
 import SearchBar from './SearchBar';
 import Logo from '/logo.png';
-// import useUser from 'hooks/useUser';
 import { useEffect, useRef } from 'react';
 import useCurrentPage from 'hooks/useCurrentPage';
 import { PERSONAL_BRAND, PREFIX_ADMIN_PAGE } from 'common/consts/constants.const';
@@ -105,7 +104,7 @@ export default function Header() {
               <Controller
                 name='search'
                 control={control}
-                render={({ field }) => <SearchBar {...field} onSearch={handleSearch} />}
+                render={({ field: { value } }) => <SearchBar value={value} onSearch={handleSearch} />}
               />
             </Col>
 
