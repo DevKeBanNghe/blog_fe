@@ -47,7 +47,7 @@ export default function BlogDetail() {
 
   const { goToHomePage } = usePageRedirect();
   useEffect(() => {
-    if (!isFetched) return;
+    if (!isFetched) return () => {};
     if (!dataGetBlogDetail?.blog_is_publish) return goToHomePage();
     mutationUpdateBlogTrackingInfo.mutate({ blog_id: currentBlogId });
   }, [dataGetBlogDetail]);

@@ -9,8 +9,10 @@ import useAuth from 'hooks/useAuth';
 import useCurrentPage from 'hooks/useCurrentPage';
 import { redirectTo } from 'common/utils/common.util';
 import { api } from 'common/utils';
+import { useDispatch } from 'react-redux';
+import { getUserInfo } from 'common/reducers/user/user.action';
 const { Content } = Layout;
-const { VITE_SSO_URL: SSO_URL, VITE_WEBPAGE_KEY: WEBPAGE_KEY, VITE_APP_URL: APP_URL } = import.meta.env;
+const { VITE_SSO_URL: SSO_URL, VITE_WEBPAGE_KEY: WEBPAGE_KEY } = import.meta.env;
 
 const OutletGridBase = ({ md, mdOutlet }) => {
   const outlet = useOutlet();
@@ -35,12 +37,14 @@ const HomePage = () => {
   const user = useUser();
   const { isAllowed } = useAuth();
   const { currentRoute, isAdminPage, queryParams } = useCurrentPage({ isPaging: false });
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const user_id_redirect = queryParams.user_id;
     if (user_id_redirect) {
-      return () => {
-        api.get(`/auth/refresh-token`, { params: { user_id: user_id_redirect } }).then(() => redirectTo(`${APP_URL}`));
+      return async () => {
+        await api.get(`/auth/refresh-token`, { params: { user_id: user_id_redirect } });
+        dispatch(getUserInfo());
       };
     }
     if (user.loading) return () => {};
