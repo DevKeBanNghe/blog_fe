@@ -10,7 +10,7 @@ import useCurrentPage from 'hooks/useCurrentPage';
 import { redirectTo } from 'common/utils/common.util';
 import { api } from 'common/utils';
 const { Content } = Layout;
-const { VITE_SSO_URL: SSO_URL, VITE_WEBPAGE_KEY: WEBPAGE_KEY } = import.meta.env;
+const { VITE_SSO_URL: SSO_URL, VITE_WEBPAGE_KEY: WEBPAGE_KEY, VITE_APP_URL: APP_URL } = import.meta.env;
 
 const OutletGridBase = ({ md, mdOutlet }) => {
   const outlet = useOutlet();
@@ -40,7 +40,7 @@ const HomePage = () => {
     const user_id_redirect = queryParams.user_id;
     if (user_id_redirect) {
       return () => {
-        api.get(`/auth/refresh-token`, { params: { user_id: user_id_redirect } });
+        api.get(`/auth/refresh-token`, { params: { user_id: user_id_redirect } }).then(() => redirectTo(`${APP_URL}`));
       };
     }
     if (user.loading) return () => {};
