@@ -4,6 +4,7 @@ import { camelCase } from 'lodash';
 const VITE_APP_NAME = import.meta.env.VITE_APP_NAME;
 
 const classes = [Blog];
+console.log('>>> classes', classes);
 
 const models = classes.reduce(
   (models, classItem) => ({
