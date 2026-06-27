@@ -4,20 +4,20 @@ import { camelCase } from 'lodash';
 const VITE_APP_NAME = import.meta.env.VITE_APP_NAME;
 
 const classes = [Blog];
-console.log('>>> classes', classes);
 
-const models = classes.reduce(
-  (models, classItem) => ({
+const models = classes.reduce((models, classItem) => {
+  const classNew = new classItem();
+  return {
     ...models,
-    [camelCase(classItem.name)]: Object.keys(new classItem()).join(', '),
-  }),
-  {},
-);
+    [camelCase(classNew.name)]: Object.keys(classNew)
+      .filter((key) => key !== 'name')
+      .join(', '),
+  };
+}, {});
+console.log('>>> models', models);
 
-console.log('>>> models', models, VITE_APP_NAME);
 const db = new Dexie(VITE_APP_NAME);
 db.version(1).stores(models);
-console.log('>>> ends', db);
 
 Object.keys(models).forEach((tableName) => {
   db.table(tableName).hook('creating', (_, obj) => {

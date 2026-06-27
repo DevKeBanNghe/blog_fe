@@ -1,4 +1,5 @@
 export class Blog {
+  name = 'blog';
   blog_id;
   blog_title;
   blog_description;
