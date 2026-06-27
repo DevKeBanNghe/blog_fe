@@ -12,8 +12,7 @@
     "i-prod": "npm i --ignore-scripts",
     "test": "echo 'running test'",
     "format": "prettier --write .",
-    "init-husky": "husky && type husky-prepare\\pre-commit > .husky/pre-commit && type husky-prepare\\commit-msg > .husky/commit-msg",
-    "postinstall": "npm run init-husky"
+    "init-husky": "husky && type husky-prepare\\pre-commit > .husky/pre-commit && type husky-prepare\\commit-msg > .husky/commit-msg"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.0.1",

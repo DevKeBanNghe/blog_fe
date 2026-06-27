@@ -14,7 +14,6 @@ const models = classes.reduce((models, classItem) => {
       .join(', '),
   };
 }, {});
-console.log('>>> models', models);
 
 const db = new Dexie(VITE_APP_NAME);
 db.version(1).stores(models);
