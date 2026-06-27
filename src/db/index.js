@@ -13,8 +13,10 @@ const models = classes.reduce(
   {},
 );
 
+console.log('>>> models', models, VITE_APP_NAME);
 const db = new Dexie(VITE_APP_NAME);
 db.version(1).stores(models);
+console.log('>>> ends', db);
 
 Object.keys(models).forEach((tableName) => {
   db.table(tableName).hook('creating', (_, obj) => {
