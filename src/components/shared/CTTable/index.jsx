@@ -156,7 +156,11 @@ const CTTable = ({
     const columnsValue = [...customColumns, ...columnsInfoRender];
     const data = isEmptyActionColumn ? columnsValue : [...columnsValue, actionColumn];
     setTableColumns(
-      data.map((item) => ({ ...item, hidden: isOverideColumns ? false : !columnsShow.includes(item.key) })),
+      data.map((item) => {
+        const isHidden = 'hidden' in item && item.hidden;
+        if (isHidden) return { ...item, hidden: true };
+        return { ...item, hidden: isOverideColumns ? false : !columnsShow.includes(item.key) };
+      }),
     );
   }, [columnsInfoRender, actionColumn, defaultColumns, columnsShow]);
 

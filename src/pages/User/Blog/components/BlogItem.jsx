@@ -41,7 +41,7 @@ function BlogItem({
   }, [blog_title]);
 
   const handleClick = () => {
-    navigate(`${ROOT_ROUTE}/${titleParam}-${blog_id}`);
+    navigate(`${ROOT_ROUTE}/${titleParam}?blog_id=${blog_id}`);
   };
 
   const actions = [

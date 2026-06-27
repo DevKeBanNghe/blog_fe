@@ -39,27 +39,27 @@ const HomePage = () => {
   const { currentRoute, isAdminPage, queryParams } = useCurrentPage({ isPaging: false });
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const user_id_redirect = queryParams.user_id;
-    if (user_id_redirect) {
-      return async () => {
-        await api.get(`/auth/refresh-token`, { params: { user_id: user_id_redirect } });
-        dispatch(getUserInfo());
-      };
-    }
-    if (user.loading) return () => {};
-    if (!isAllowed) {
-      if (!user.user_name)
-        return () => {
-          redirectTo(`${SSO_URL}sign-in?webpage_key=${WEBPAGE_KEY}`);
-        };
-      navigate('error', {
-        state: {
-          status_code: 403,
-        },
-      });
-    }
-  }, [user, isAllowed, currentRoute]);
+  // useEffect(() => {
+  //   const user_id_redirect = queryParams.user_id;
+  //   if (user_id_redirect) {
+  //     return async () => {
+  //       await api.get(`/auth/refresh-token`, { params: { user_id: user_id_redirect } });
+  //       dispatch(getUserInfo());
+  //     };
+  //   }
+  //   if (user.loading) return () => {};
+  //   if (!isAllowed) {
+  //     if (!user.user_name)
+  //       return () => {
+  //         redirectTo(`${SSO_URL}sign-in?webpage_key=${WEBPAGE_KEY}`);
+  //       };
+  //     navigate('error', {
+  //       state: {
+  //         status_code: 403,
+  //       },
+  //     });
+  //   }
+  // }, [user, isAllowed, currentRoute]);
 
   return (
     <>

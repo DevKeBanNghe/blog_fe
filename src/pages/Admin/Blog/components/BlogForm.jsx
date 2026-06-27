@@ -170,15 +170,14 @@ function BlogFormRef({ isShowActionDefault = true }, ref) {
                         <Alert
                           message={
                             <>
-                              Usage Markdown:{' '}
                               <Link href='https://www.markdownguide.org/basic-syntax/' target='_blank'>
-                                Click here
+                                How to use Markdown
                               </Link>
                             </>
                           }
                           type='warning'
                         />
-                        <Switch
+                        {/* <Switch
                           style={{ float: 'right', marginBottom: '10px' }}
                           checkedChildren='preview'
                           unCheckedChildren='code'
@@ -187,16 +186,23 @@ function BlogFormRef({ isShowActionDefault = true }, ref) {
                             if (!watch('blog_content')) return;
                             setIsPreview(!isPreview);
                           }}
-                        />
+                        /> */}
                       </Flex>
 
-                      {isPreview ? (
+                      {/* {isPreview ? (
                         <Card style={{ border: '1px solid' }}>
                           <CTMarkdown>{field.value}</CTMarkdown>
                         </Card>
                       ) : (
                         <CTInputTextArea {...field} placeholder={'Blog content'} />
-                      )}
+                      )} */}
+
+                      <Flex justify='center'>
+                        <CTInputTextArea {...field} placeholder={'Blog content'} />
+                        <Card style={{ border: '1px solid' }}>
+                          <CTMarkdown>{field.value}</CTMarkdown>
+                        </Card>
+                      </Flex>
                     </>
                   ),
                 },
@@ -261,7 +267,7 @@ function BlogFormRef({ isShowActionDefault = true }, ref) {
   return (
     <>
       <Row justify={'center'}>
-        <Col span={20}>
+        <Col span={24}>
           <Card style={{ width: '100%' }}>
             <CTForm
               name='blog-form'

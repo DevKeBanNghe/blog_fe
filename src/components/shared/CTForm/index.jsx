@@ -43,7 +43,7 @@ export default function CTForm({
       };
     }
     return [defaultAction, ...initActions];
-  }, [currentRoute]);
+  }, [initActions, currentRoute]);
 
   const permissionKeysDefaultActionValue = useMemo(() => {
     const data = permissionKeysDefaultAction.find((item) => {

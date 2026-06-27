@@ -7,6 +7,7 @@ import CTTextTruncate from 'components/shared/CTTextTruncate';
 import { Typography } from 'antd';
 import useGetList from 'hooks/useGetList';
 import useCurrentPage from 'hooks/useCurrentPage';
+
 const { Text } = Typography;
 function BlogTable() {
   const navigate = useNavigate();
@@ -19,6 +20,14 @@ function BlogTable() {
       width: 50,
       dataIndex: 'blog_title',
       key: 'blog_title',
+      fixed: 'left',
+    },
+    {
+      title: 'Blog Content',
+      width: 50,
+      dataIndex: 'blog_content',
+      key: 'blog_content',
+      hidden: true,
       fixed: 'left',
     },
     {
